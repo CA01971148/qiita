@@ -2,9 +2,15 @@
 
 import { FaBell, FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
   const [activeTab, setActiveTab] = useState('home');
+  const router = useRouter();
+
+  const handlePostClick = () => {
+    router.push('/post'); // 投稿ページに遷移
+  };
 
   return (
     <header className="border-b border-gray-300">
@@ -18,7 +24,9 @@ const Header = () => {
         />
         <div className="flex gap-4 items-center">
           <FaBell className="text-xl cursor-pointer" />
-          <button className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2">
+          {/* 投稿するボタン */}
+          <button className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2" onClick={handlePostClick}> 
+          {/* /ボタンを押したらhandlePostClick関数を実行 */}
             <FaPlus />
             投稿する
           </button>
