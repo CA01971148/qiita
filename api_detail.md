@@ -98,3 +98,27 @@ Content-Type:application/json
   "success": true
 }
 ```
+
+`http://[自分のローカル実行path]/card/add`
+### method = POST
+### Request
+#### Header
+```
+Content-Type:application/json
+```
+#### body
+```
+{
+    "name": "Example Card",
+    "detail": "This is a detailed description of the card.",
+    "tag": ["tag1", "tag2", "tag3"],
+    "userid": 1
+}
+```
+### Response
+```
+{
+  "name": "Example Card",
+  "succeess": true
+}
+```

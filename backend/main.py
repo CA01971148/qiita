@@ -1,6 +1,7 @@
 from flask import Flask, jsonify,request
 from flask_cors import CORS
 from flask_mysqldb import MySQL
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -72,3 +73,19 @@ def account_add():
         return jsonify({'success': True, 'name': user}), 200
     else:
         return jsonify({'success': False}), 210
+    
+@app.route('/card/add',methods = ['POST'])
+def card_add():
+    cur = mysql.connection.cursor()
+    data = request.json
+    {'success':False}
+    name = data.get('name')
+    detail = data.get('detail')
+    tag = json.dumps(data.get('tag'))
+    userid = data.get('userid')
+    cur.execute('INSERT INTO card(name,detail,tag,heart,userid) VALUES (%s,%s,%s,"0",%s)',(name,detail,tag,userid))
+    mysql.connection.commit()
+    if cur.rowcount == 1:
+        return jsonify({'succeess':True,'name':name}),200
+    else:
+        return jsonify({'success':False}),210
