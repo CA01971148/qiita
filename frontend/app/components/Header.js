@@ -63,9 +63,9 @@ const Header = () => {
 
       {/* コンテンツ切り替え */}
       <div className="p-4">
-        {activeTab === 'home' && <div>ホームコンテンツ</div>}
-        {activeTab === 'timeline' && <div>タイムラインコンテンツ</div>}
-        {activeTab === 'trends' && <div>トレンドコンテンツ</div>}
+        {activeTab === 'home' && <div></div>}
+        {activeTab === 'timeline' && <div></div>}
+        {activeTab === 'trends' && <div></div>}
       </div>
     </header>
   );
