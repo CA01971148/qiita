@@ -1,4 +1,11 @@
+"use client";
+import { useState } from "react";
+
 export default function Home() {
+  const [liked, setLiked] = useState(false);
+
+  const toogleLiked = () => setLiked(!liked);
+
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex">
       <div
@@ -33,8 +40,13 @@ export default function Home() {
               #winter
             </span>
             <p>
-              <span className="i-heroicons-solid-heart w-10 h-10 "></span>
-              <span className="i-heroicons-solid-heart w-10 h-10 text-red-500"></span>
+              <button onClick={toogleLiked}>
+                <span
+                  className={`i-heroicons-solid-heart w-10 h-10 ${
+                    liked ? "" : "text-red-500"
+                  }`}
+                ></span>
+              </button>
             </p>
           </div>
         </div>
