@@ -5,7 +5,7 @@ export default function Home() {
     <div>
       <Post />
       <main>
-        <h1>Welcome to MyApp!</h1>
+        <h1>投稿ページです！！</h1>
       </main>
     </div>
   );
