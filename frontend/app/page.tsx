@@ -38,6 +38,8 @@ export default function Home() {
               #winter
             </span>
           </div>
+          <span className="i-heroicons-solid-heart w-10 h-10 "></span>
+          <span className="i-heroicons-solid-heart w-10 h-10 text-red-500"></span>
         </div>
       </div>
     </div>
