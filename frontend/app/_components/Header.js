@@ -3,6 +3,7 @@
 import { FaBell, FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Homepage from './Homepage';
 
 const Header = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -83,7 +84,7 @@ const Header = () => {
 
       {/* コンテンツ切り替え */}
       <div className="p-4">
-        {activeTab === 'home' && <div></div>}
+        {activeTab === 'home' && <div><Homepage /></div>}
         {activeTab === 'timeline' && <div></div>}
         {activeTab === 'trends' && <div></div>}
       </div>
