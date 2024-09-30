@@ -14,7 +14,7 @@ export default function Card() {
         title="Woman holding a mug"
       ></div>
 
-      <div className="border border-gray-400 p-4 flex flex-col justify-between leading-normal">
+      <div className="border border-gray-400 p-4 flex flex-col justify-between leading-normal bg-teal-100">
         <div className="mb-2">
           <div className="flex items-center">
             <img
