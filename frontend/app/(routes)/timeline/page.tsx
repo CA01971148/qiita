@@ -1,10 +1,13 @@
-"use client";
-
 import Card from "@/app/_components/card";
+import Header from "@/app/_components/Header";
+import React from "react";
 
 export default function Timeline() {
-  
-
   return (
-    <Card />
-  )}
+    <>
+      <Header />
+      <Card />
+      <Card />
+    </>
+  );
+}
