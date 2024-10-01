@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@egoist/tailwindcss-icons": "^1.8.1",
+    "@iconify/json": "^2.2.254",
+    "next": "14.2.13",
     "marked": "^14.1.2",
     "next": "14.2.13",
     "react": "^18",
