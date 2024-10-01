@@ -1,15 +1,13 @@
-import Header from './_components/Header';
-// import Homepage from './_components/Homepage';
+import Header from "./components/Header";
+import Homepage from "./components/Homepage";
 
 export default function Home() {
   return (
     <div>
       <Header />
       <main>
-        <h1>Welcome to MyApp!</h1>
-        {/* <Homepage /> */}
+        <Homepage />
       </main>
     </div>
   );
 }
-

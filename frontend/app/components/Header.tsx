@@ -2,17 +2,11 @@
 
 import { FaBell, FaPlus } from "react-icons/fa";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Homepage from "./Homepage";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const Header = () => {
-  const [activeTab, setActiveTab] = useState("home");
-  const router = useRouter();
-
-  const handlePostClick = () => {
-    router.push("/post"); // 投稿ページに遷移
-  };
+  const pathname = usePathname();
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -57,55 +51,41 @@ const Header = () => {
             className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
             onClick={handlePostClick}
           >
-            {/* /ボタンを押したらhandlePostClick関数を実行 */}
             <FaPlus />
             投稿する
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* 下部ナビゲーションバー */}
       <nav className="flex justify-around bg-gray-800 text-white py-2">
-        <Link href="/">
-          <button
-            className={`${activeTab === "home" ? "font-bold underline" : ""}`}
-            onClick={() => setActiveTab("home")}
-          >
-            ホーム
-          </button>
+        <Link
+          href="/"
+          className={`${
+            pathname === "/" ? "border-b-2 border-white-500" : ""
+          } `}
+        >
+          ホーム
         </Link>
 
-        <Link href="/timeline">
-          <button
-            className={`${
-              activeTab === "timeline" ? "font-bold underline" : ""
-            }`}
-            onClick={() => setActiveTab("timeline")}
-          >
-            タイムライン
-          </button>
+        <Link
+          href="/timeline"
+          className={`${
+            pathname === "/timeline" ? "border-b-2 border-white-500" : ""
+          }`}
+        >
+          タイムライン
         </Link>
 
-        <Link href="/trend">
-          <button
-            className={`${activeTab === "trends" ? "font-bold underline" : ""}`}
-            onClick={() => setActiveTab("trends")}
-          >
-            トレンド
-          </button>
+        <Link
+          href="/trend"
+          className={`${
+            pathname === "/trend" ? "border-b-2 border-white-500" : ""
+          }`}
+        >
+          トレンド
         </Link>
       </nav>
-
-      {/* コンテンツ切り替え */}
-      <div className="p-4">
-        {activeTab === "home" && (
-          <div>
-            <Homepage />
-          </div>
-        )}
-        {activeTab === "timeline" && <div></div>}
-        {activeTab === "trends" && <div></div>}
-      </div>
     </header>
   );
 };

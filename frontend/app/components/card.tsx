@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { handleClick } from "../_utils/handleclick";
+import { handleClick } from "../utils/handleclick";
 
 export default function Card() {
   const [liked, setLiked] = useState(false);
