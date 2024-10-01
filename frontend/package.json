@@ -11,6 +11,7 @@
   "dependencies": {
     "@egoist/tailwindcss-icons": "^1.8.1",
     "@iconify/json": "^2.2.254",
+    "@tailwindcss/typography": "^0.5.15",
     "dompurify": "^3.1.7",
     "marked": "^14.1.2",
     "next": "14.2.13",

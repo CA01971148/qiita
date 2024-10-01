@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import typography from '@tailwindcss/typography'; // 追加
 
 const {
   iconsPlugin,
@@ -20,6 +21,7 @@ const config: Config = {
     },
   },
   plugins: [
+    typography, // ここに追加
     iconsPlugin({
       // 利用したい icon collection を利用する
       // https://icones.js.org/
@@ -27,4 +29,5 @@ const config: Config = {
     }),
   ],
 };
+
 export default config;
