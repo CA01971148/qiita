@@ -6,7 +6,6 @@ import { handleClick } from "../_utils/handleclick";
 export default function Card() {
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(10);
-
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex my-8 ">
       <div

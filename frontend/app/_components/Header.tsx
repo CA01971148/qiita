@@ -54,7 +54,7 @@ const Header = () => {
           )}
           {/* 投稿するボタン */}
           <button
-            className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2"
+            className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
             onClick={handlePostClick}
           >
             {/* /ボタンを押したらhandlePostClick関数を実行 */}
