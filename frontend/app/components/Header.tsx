@@ -7,7 +7,6 @@ import Link from "next/link";
 
 const Header = () => {
   const pathname = usePathname();
-
   const [isVisible, setIsVisible] = useState(false);
 
   // クリックで表示/非表示を切り替える
@@ -18,7 +17,7 @@ const Header = () => {
   return (
     <header className="border-b border-gray-300">
       {/* 上部ヘッダー */}
-      <div className="flex justify-between items-center p-4 bg-blue-400">
+      <div className="flex justify-between items-center p-4 bg-blue-400 relative">
         <Link href="/">
           <div className="text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center">
             ITM
@@ -46,13 +45,12 @@ const Header = () => {
               </ul>
             </div>
           )}
-          {/* 投稿するボタン */}
-          <button
-            className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
-            onClick={handlePostClick}
-          >
-            <FaPlus />
-            投稿する
+          {/* 投稿するボタンをLinkでラップ */}
+          <Link href="/post">
+            <button className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
+              <FaPlus />
+              投稿する
+            </button>
           </Link>
         </div>
       </div>
@@ -62,8 +60,8 @@ const Header = () => {
         <Link
           href="/"
           className={`${
-            pathname === "/" ? "border-b-2 border-white-500" : ""
-          } `}
+            pathname === "/" ? "border-b-2 border-white" : ""
+          }`}
         >
           ホーム
         </Link>
@@ -71,7 +69,7 @@ const Header = () => {
         <Link
           href="/timeline"
           className={`${
-            pathname === "/timeline" ? "border-b-2 border-white-500" : ""
+            pathname === "/timeline" ? "border-b-2 border-white" : ""
           }`}
         >
           タイムライン
@@ -80,7 +78,7 @@ const Header = () => {
         <Link
           href="/trend"
           className={`${
-            pathname === "/trend" ? "border-b-2 border-white-500" : ""
+            pathname === "/trend" ? "border-b-2 border-white" : ""
           }`}
         >
           トレンド
