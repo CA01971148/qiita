@@ -8,7 +8,6 @@ import Homepage from './Homepage';
 const Header = () => {
   const [activeTab, setActiveTab] = useState('home');
   const router = useRouter();
-
   const handlePostClick = () => {
     router.push('/post'); // 投稿ページに遷移
   };
@@ -24,7 +23,7 @@ const Header = () => {
     <header className="border-b border-gray-300">
       {/* 上部ヘッダー */}
       <div className="flex justify-between items-center p-4 bg-blue-400">
-        <div className="text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center">ITM</div>
+        <a href='/'><div className="text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center">ITM</div></a>
         <input
           type="text"
           placeholder="記事、質問を検索..."

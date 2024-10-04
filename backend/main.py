@@ -1,10 +1,14 @@
-from flask import Flask, jsonify,request
+from flask import Flask, jsonify,request, make_response
 from flask_cors import CORS
 from flask_mysqldb import MySQL
+import jwt
+import datetime  # 追加
+from functools import wraps
 import json
 
 app = Flask(__name__)
-CORS(app)
+SECRET_KEY = "sadjfljsiejfoj"
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # MySQL接続情報を設定
 app.config['MYSQL_HOST'] = 'localhost'
@@ -13,6 +17,31 @@ app.config['MYSQL_PASSWORD'] = 'Shoma0517!'
 app.config['MYSQL_DB'] = 'qiita'
 
 mysql = MySQL(app)
+
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.cookies.get('myapp_token')
+
+        if not token:
+            return jsonify({'error': 'Token is missing!'}), 403
+
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            return jsonify({'error': 'Token has expired!'}), 403
+        except Exception as e:
+            return jsonify({'error': 'Token is invalid!', 'details': str(e)}), 403
+
+        return f(*args, **kwargs)
+    
+    return decorated
+
+
+
+
 
 @app.route("/")
 def index():
@@ -89,3 +118,51 @@ def card_add():
         return jsonify({'succeess':True,'name':name}),200
     else:
         return jsonify({'success':False}),210
+    
+@app.route('/login', methods=['POST'])
+def login():
+    cur = mysql.connection.cursor()
+    data = request.json
+    {'success':False}
+    try:
+        if request.method == 'POST':
+            user = data.get('name')
+            pw = data.get('password')
+            
+            cur = mysql.connection.cursor()
+            
+            cur.execute("SELECT user, pas from account where user = %s",(user,))
+            data2 = cur.fetchall()
+            cur.close()
+            if data2:
+                if data2[0][1] == pw:
+                    
+                    if not user or not pw:
+                        return jsonify({'error': 'user and pw are required.'}), 400
+
+                    # JWTを作成 (有効期限を10秒に設定)
+                    payload = {
+                        'user': user,
+                        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1)  # 現在時刻 + 10秒
+                    }
+                    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
+                    if isinstance(token, bytes):
+                        token = token.decode('utf-8')
+
+                    response = make_response(jsonify({'message': 'Token created','success':True}))
+                    response.set_cookie('myapp_token', token, httponly=True, secure=False)
+
+                    return response
+                else:
+                    return jsonify({'success':False}),202
+    except Exception as e:
+        return jsonify({'error': str(e),'success':False}), 500
+
+@app.route('/special', methods=['GET'])
+@token_required
+def special():
+    return jsonify({'message': 'This is a special page for logged-in users!'})
+
+if __name__ == "__main__":
+    app.run(debug=True)

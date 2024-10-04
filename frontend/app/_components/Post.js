@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { marked } from 'marked';
+import UseAuth from './hooks/UseAuth';
 
 function Post() {
 const router = useRouter();
-
+UseAuth();
 const handlePostClick = () => {
     router.push('/'); // http://localhost:3000に遷移
 };
@@ -20,9 +21,7 @@ return (
     <header className="border-b border-gray-300">
         {/* 上部ヘッダー */}
         <div className="flex justify-between items-center p-4 bg-blue-400">
-        <div className="text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center">
-            ITM
-        </div>
+        <a href='/'><div className="text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center">ITM</div></a>
 
         {/* 戻るボタンと投稿ボタンを横並びに */}
         <div className="flex items-center gap-2">
