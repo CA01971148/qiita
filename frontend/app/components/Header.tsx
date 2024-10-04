@@ -1,17 +1,35 @@
 "use client";
 
 import { FaBell, FaPlus } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const Header = () => {
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // ログイン状態をシミュレートするためにuseEffectでチェック
+  useEffect(() => {
+    // ここで実際のログイン状態を取得する処理を追加する
+    const userLoggedIn = true; // ダミーデータ: 実際には認証サービスからのデータを使用
+    setIsLoggedIn(userLoggedIn);
+  }, []);
 
   // クリックで表示/非表示を切り替える
   const toggleNotification = () => {
     setIsVisible(!isVisible);
+  };
+
+  const handleLogin = () => {
+    // ログイン処理を追加する
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    // ログアウト処理を追加する
+    setIsLoggedIn(false);
   };
 
   return (
@@ -30,12 +48,15 @@ const Header = () => {
           className="flex-1 mx-4 p-2 border border-gray-300 rounded"
         />
         <div className="flex gap-4 items-center">
-          <FaBell
-            className="text-xl cursor-pointer"
-            onClick={toggleNotification} // クリックで通知欄をトグル
-          />
+          {/* ベルのアイコン: ログインしているときのみ表示 */}
+          {isLoggedIn && (
+            <FaBell
+              className="text-xl cursor-pointer"
+              onClick={toggleNotification} // クリックで通知欄をトグル
+            />
+          )}
           {/* 通知欄 */}
-          {isVisible && (
+          {isVisible && isLoggedIn && (
             <div className="absolute right-0 top-14 w-64 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
               <h3 className="font-bold border-b border-black p-0 m-0">通知</h3>
               <ul>
@@ -45,13 +66,37 @@ const Header = () => {
               </ul>
             </div>
           )}
-          {/* 投稿するボタンをLinkでラップ */}
-          <Link href="/post">
-            <button className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
+
+          {/* ログインしていないときはログインボタンを表示 */}
+          {!isLoggedIn && (
+            <button
+              onClick={handleLogin}
+              className="bg-orange-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
+             >
               <FaPlus />
-              投稿する
+              ログイン
             </button>
-          </Link>
+          )}
+
+          {/* ログインしている場合はログアウトボタンを表示 */}
+          {isLoggedIn && (
+            <button
+              onClick={handleLogout}
+              className="bg-gray-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
+            >
+              ログアウト
+            </button>
+          )}
+
+          {/* 投稿するボタンはログインしているときのみ表示 */}
+          {isLoggedIn && (
+            <Link href="/post">
+              <button className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
+                <FaPlus />
+                投稿する
+              </button>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -59,9 +104,7 @@ const Header = () => {
       <nav className="flex justify-around bg-gray-800 text-white py-2">
         <Link
           href="/"
-          className={`${
-            pathname === "/" ? "border-b-2 border-white" : ""
-          }`}
+          className={`${pathname === "/" ? "border-b-2 border-white" : ""}`}
         >
           ホーム
         </Link>

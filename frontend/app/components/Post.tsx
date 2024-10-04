@@ -1,19 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import Link from "next/link";
 
 function Post() {
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handlePostClick = () => {
-    setTitle('');
-    setTags('');
-    setContent('');
-    router.push('/');
-  };
+  // const handlePostClick = () => {
+  //   setTitle('');
+  //   setTags('');
+  //   setContent('');
+  //   router.push('/');
+  // };
 
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState('');
@@ -34,18 +35,19 @@ function Post() {
       <header className='border-b border-gray-300'>
         {/* 上部ヘッダー */}
         <div className='flex justify-between items-center p-4 bg-blue-400'>
-          <div className='text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center'>
-            ITM
-          </div>
+          <Link href="/">
+            <div className='text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center'>
+              ITM
+            </div>
+          </Link>
 
           {/* 戻るボタンと投稿ボタンを横並びに */}
           <div className='flex items-center gap-2'>
-            <button
-              className='bg-red-300 text-white px-2 py-1 rounded flex items-center'
-              onClick={handlePostClick}
-            >
-              戻る
-            </button>
+            <Link href="/">
+              <button className='bg-red-300 text-white px-2 py-1 rounded flex items-center'>
+                戻る
+              </button>
+            </Link>
             <button className='bg-green-500 text-white px-3 py-2 rounded flex items-center'>
               投稿!!
             </button>
