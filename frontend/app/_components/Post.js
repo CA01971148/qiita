@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { marked } from 'marked';
-import UseAuth from './hooks/UseAuth';
+import UseAuth from './hooks/UseAuth'
 
 function Post() {
+UseAuth()
 const router = useRouter();
-UseAuth();
+
 const handlePostClick = () => {
     router.push('/'); // http://localhost:3000に遷移
 };
