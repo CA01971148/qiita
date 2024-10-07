@@ -1,6 +1,8 @@
 "use client";
 
 import { FaBell, FaPlus } from "react-icons/fa";
+import { MdOutlineSearch } from 'react-icons/md';
+// import { FaUser } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -9,10 +11,10 @@ const Header = () => {
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの表示状態を管理
 
   // ログイン状態をシミュレートするためにuseEffectでチェック
   useEffect(() => {
-    // ここで実際のログイン状態を取得する処理を追加する
     const userLoggedIn = true; // ダミーデータ: 実際には認証サービスからのデータを使用
     setIsLoggedIn(userLoggedIn);
   }, []);
@@ -22,13 +24,15 @@ const Header = () => {
     setIsVisible(!isVisible);
   };
 
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
+
   const handleLogin = () => {
-    // ログイン処理を追加する
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
-    // ログアウト処理を追加する
     setIsLoggedIn(false);
   };
 
@@ -42,20 +46,31 @@ const Header = () => {
           </div>
         </Link>
 
-        <input
-          type="text"
-          placeholder="記事、質問を検索..."
-          className="flex-1 mx-4 p-2 border border-gray-300 rounded"
-        />
-        <div className="flex gap-4 items-center">
-          {/* ベルのアイコン: ログインしているときのみ表示 */}
+        <div className="flex justify-end items-center">
+          {/* モバイル向け検索アイコン */}
+          <MdOutlineSearch
+            className="text-3xl cursor-pointer lg:hidden" // モバイルではアイコンのみ表示
+            onClick={toggleSearch}
+          />
+          
+          {/* デスクトップ向け検索バー */}
+          <div className="relative w-80 hidden lg:block">
+            <MdOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="text"
+              placeholder="記事、質問を検索..."
+              className="w-full pl-10 p-2 border border-gray-300 rounded outline-none"
+            />
+          </div>
+
           {isLoggedIn && (
             <FaBell
-              className="text-xl cursor-pointer"
-              onClick={toggleNotification} // クリックで通知欄をトグル
+              className="text-xl cursor-pointer mx-2"
+              onClick={toggleNotification}
+              size={30} color={'yellow'}
             />
           )}
-          {/* 通知欄 */}
+
           {isVisible && isLoggedIn && (
             <div className="absolute right-0 top-14 w-64 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
               <h3 className="font-bold border-b border-black p-0 m-0">通知</h3>
@@ -67,28 +82,25 @@ const Header = () => {
             </div>
           )}
 
-          {/* ログインしていないときはログインボタンを表示 */}
           {!isLoggedIn && (
             <button
               onClick={handleLogin}
-              className="bg-orange-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
-             >
+              className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
+            >
               <FaPlus />
               ログイン
             </button>
           )}
 
-          {/* ログインしている場合はログアウトボタンを表示 */}
           {isLoggedIn && (
             <button
               onClick={handleLogout}
-              className="bg-gray-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
+              className="bg-gray-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
             >
               ログアウト
             </button>
           )}
 
-          {/* 投稿するボタンはログインしているときのみ表示 */}
           {isLoggedIn && (
             <Link href="/post">
               <button className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
@@ -99,6 +111,17 @@ const Header = () => {
           )}
         </div>
       </div>
+
+      {/* 検索バー: モバイル向け、アイコンをクリックで表示 */}
+      {isSearchOpen && (
+        <div className="w-full px-4 py-2 bg-gray-100 border-b border-gray-300 lg:hidden">
+          <input
+            type="text"
+            placeholder="記事、質問を検索..."
+            className="w-full p-2 border border-gray-300 rounded outline-none"
+          />
+        </div>
+      )}
 
       {/* 下部ナビゲーションバー */}
       <nav className="flex justify-around bg-gray-800 text-white py-2">
@@ -111,18 +134,14 @@ const Header = () => {
 
         <Link
           href="/timeline"
-          className={`${
-            pathname === "/timeline" ? "border-b-2 border-white" : ""
-          }`}
+          className={`${pathname === "/timeline" ? "border-b-2 border-white" : ""}`}
         >
           タイムライン
         </Link>
 
         <Link
           href="/trend"
-          className={`${
-            pathname === "/trend" ? "border-b-2 border-white" : ""
-          }`}
+          className={`${pathname === "/trend" ? "border-b-2 border-white" : ""}`}
         >
           トレンド
         </Link>
