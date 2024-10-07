@@ -1,8 +1,7 @@
 "use client";
 
-import { FaBell, FaPlus } from "react-icons/fa";
+import { FaBell, FaPlus, FaUser } from "react-icons/fa";
 import { MdOutlineSearch } from 'react-icons/md';
-// import { FaUser } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -12,6 +11,7 @@ const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの表示状態を管理
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの表示状態を管理
 
   // ログイン状態をシミュレートするためにuseEffectでチェック
   useEffect(() => {
@@ -19,13 +19,19 @@ const Header = () => {
     setIsLoggedIn(userLoggedIn);
   }, []);
 
-  // クリックで表示/非表示を切り替える
+  // クリックで通知欄の表示/非表示を切り替える
   const toggleNotification = () => {
     setIsVisible(!isVisible);
   };
 
+  // 検索バーの表示/非表示を切り替える
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
+  };
+
+  // メニューの表示/非表示を切り替える
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const handleLogin = () => {
@@ -49,10 +55,10 @@ const Header = () => {
         <div className="flex justify-end items-center">
           {/* モバイル向け検索アイコン */}
           <MdOutlineSearch
-            className="text-3xl cursor-pointer lg:hidden" // モバイルではアイコンのみ表示
+            className="text-3xl cursor-pointer lg:hidden"
             onClick={toggleSearch}
           />
-          
+
           {/* デスクトップ向け検索バー */}
           <div className="relative w-80 hidden lg:block">
             <MdOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
@@ -82,6 +88,7 @@ const Header = () => {
             </div>
           )}
 
+          {/* ログインしていないときはログインボタンを表示 */}
           {!isLoggedIn && (
             <button
               onClick={handleLogin}
@@ -92,18 +99,34 @@ const Header = () => {
             </button>
           )}
 
+          {/* ログインしている場合はユーザーアイコンを表示 */}
           {isLoggedIn && (
-            <button
-              onClick={handleLogout}
-              className="bg-gray-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
-            >
-              ログアウト
-            </button>
-          )}
+            <div className="relative">
+              <FaUser
+                className="text-xl cursor-pointer"
+                onClick={toggleMenu} // クリックでメニュー表示をトグル
+                size={30}
+              />
 
+              {/* トグルメニュー */}
+              {isMenuOpen && (
+                <div className="absolute right-0 top-14 w-48 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
+                  <ul className="flex flex-col gap-2">
+                    <li>
+                      <Link href="/mypage">マイページ</Link>
+                    </li>
+                    <li>
+                      <button onClick={handleLogout} className="text-left w-full">ログアウト</button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+          
           {isLoggedIn && (
             <Link href="/post">
-              <button className="bg-green-500 text-white px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
+              <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
                 <FaPlus />
                 投稿する
               </button>
