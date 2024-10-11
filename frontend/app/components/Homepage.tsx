@@ -5,7 +5,7 @@ const HomePage = () => {
   // 左サイドバーのコンテンツ
   const LeftSidebar = () => {
     return (
-      <div className="w-1/4 p-4 border-r border-gray-300">
+      <div className="w-full sm:w-1/4 p-4 border-b sm:border-r sm:border-b-0 border-gray-300">
         <h2 className="font-bold text-lg">フォロー中のタグ</h2>
         <ul className="mt-2">
           <li>#React</li>
@@ -25,7 +25,7 @@ const HomePage = () => {
   // 右サイドバーのコンテンツ
   const RightSidebar = () => {
     return (
-      <div className="w-1/4 p-4">
+      <div className="w-full sm:w-1/4 p-4 border-t sm:border-t-0 sm:border-l border-gray-300">
         <h2 className="font-bold text-lg">トレンドの記事</h2>
         <ul className="mt-2">
           <li>トレンド記事1</li>
@@ -43,9 +43,9 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-col sm:flex-row">
       <LeftSidebar />
-      <div className="w-1/2 p-4">
+      <div className="w-full sm:w-1/2 p-4">
         <h1 className="text-2xl font-bold">メインコンテンツ</h1>
         <p>ここにメインのコンテンツを追加します。</p>
       </div>
