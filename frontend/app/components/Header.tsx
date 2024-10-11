@@ -1,7 +1,7 @@
 "use client";
 
 import { FaBell, FaPlus, FaUser } from "react-icons/fa";
-import { MdOutlineSearch } from 'react-icons/md';
+import { MdOutlineSearch } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -73,7 +73,8 @@ const Header = () => {
             <FaBell
               className="text-xl cursor-pointer mx-2"
               onClick={toggleNotification}
-              size={30} color={'yellow'}
+              size={30}
+              color={"yellow"}
             />
           )}
 
@@ -116,14 +117,19 @@ const Header = () => {
                       <Link href="/mypage">マイページ</Link>
                     </li>
                     <li>
-                      <button onClick={handleLogout} className="text-left w-full">ログアウト</button>
+                      <button
+                        onClick={handleLogout}
+                        className="text-left w-full"
+                      >
+                        ログアウト
+                      </button>
                     </li>
                   </ul>
                 </div>
               )}
             </div>
           )}
-          
+
           {isLoggedIn && (
             <Link href="/post">
               <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
@@ -157,14 +163,18 @@ const Header = () => {
 
         <Link
           href="/timeline"
-          className={`${pathname === "/timeline" ? "border-b-2 border-white" : ""}`}
+          className={`${
+            pathname === "/timeline" ? "border-b-2 border-white" : ""
+          }`}
         >
           タイムライン
         </Link>
 
         <Link
           href="/trend"
-          className={`${pathname === "/trend" ? "border-b-2 border-white" : ""}`}
+          className={`${
+            pathname === "/trend" ? "border-b-2 border-white" : ""
+          }`}
         >
           トレンド
         </Link>
