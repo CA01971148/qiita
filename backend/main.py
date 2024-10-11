@@ -2,7 +2,7 @@ from flask import Flask, jsonify,request, make_response
 from flask_cors import CORS
 from flask_mysqldb import MySQL
 import jwt
-import datetime  # 追加
+import datetime  
 from functools import wraps
 import json
 
@@ -143,7 +143,7 @@ def login():
                     # JWTを作成 (有効期限を10秒に設定)
                     payload = {
                         'user': user,
-                        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1)  # 現在時刻 + 10秒
+                        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1000)  # 現在時刻 + 10秒
                     }
                     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -163,6 +163,8 @@ def login():
 @token_required
 def special():
     return jsonify({'message': 'This is a special page for logged-in users!'})
+
+# @app.route('/confirmation_name',methods=['GET'])
 
 if __name__ == "__main__":
     app.run(debug=True)

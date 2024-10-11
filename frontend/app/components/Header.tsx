@@ -90,13 +90,16 @@ const Header = () => {
 
           {/* ログインしていないときはログインボタンを表示 */}
           {!isLoggedIn && (
-            <button
+            <a href="/login">
+              <button
               onClick={handleLogin}
               className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
             >
               <FaPlus />
               ログイン
             </button>
+            </a>
+              
           )}
 
           {/* ログインしている場合はユーザーアイコンを表示 */}
