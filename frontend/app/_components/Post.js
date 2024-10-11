@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { marked } from 'marked';
-import UseAuth from './hooks/UseAuth'
 
 function Post() {
-UseAuth()
+
 const router = useRouter();
 
 const handlePostClick = () => {
