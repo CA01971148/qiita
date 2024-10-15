@@ -5,19 +5,15 @@ import { MdOutlineSearch } from 'react-icons/md';
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import UseFetchName from '../_components/hooks/UseFetchName'
 
 const Header = () => {
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの表示状態を管理
   const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの表示状態を管理
 
-  // ログイン状態をシミュレートするためにuseEffectでチェック
-  useEffect(() => {
-    const userLoggedIn = true; // ダミーデータ: 実際には認証サービスからのデータを使用
-    setIsLoggedIn(userLoggedIn);
-  }, []);
+  const { name, error } = UseFetchName();
 
   // クリックで通知欄の表示/非表示を切り替える
   const toggleNotification = () => {
@@ -32,14 +28,6 @@ const Header = () => {
   // メニューの表示/非表示を切り替える
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
   };
 
   return (
@@ -69,48 +57,18 @@ const Header = () => {
             />
           </div>
 
-          {isLoggedIn && (
-            <FaBell
-              className="text-xl cursor-pointer mx-2"
-              onClick={toggleNotification}
-              size={30} color={'yellow'}
-            />
-          )}
-
-          {isVisible && isLoggedIn && (
-            <div className="absolute right-0 top-14 w-64 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
-              <h3 className="font-bold border-b border-black p-0 m-0">通知</h3>
-              <ul>
-                <li className="pb-2">新しいメッセージがあります。</li>
-                <li className="pt-2">更新があります。</li>
-                <li className="pt-2">新しいコメントが投稿されました。</li>
-              </ul>
-            </div>
-          )}
-
-          {/* ログインしていないときはログインボタンを表示 */}
-          {!isLoggedIn && (
-            <a href="/login">
-              <button
-              onClick={handleLogin}
-              className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
-            >
-              <FaPlus />
-              ログイン
-            </button>
-            </a>
-              
-          )}
-
-          {/* ログインしている場合はユーザーアイコンを表示 */}
-          {isLoggedIn && (
-            <div className="relative">
+          {name && (  // name が存在する場合にアイコンを表示
+            <>
+              <FaBell
+                className="text-xl cursor-pointer mx-2"
+                onClick={toggleNotification}
+                size={30} color={'yellow'}
+              />
               <FaUser
                 className="text-xl cursor-pointer"
                 onClick={toggleMenu} // クリックでメニュー表示をトグル
                 size={30}
               />
-
               {/* トグルメニュー */}
               {isMenuOpen && (
                 <div className="absolute right-0 top-14 w-48 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
@@ -119,15 +77,26 @@ const Header = () => {
                       <Link href="/mypage">マイページ</Link>
                     </li>
                     <li>
-                      <button onClick={handleLogout} className="text-left w-full">ログアウト</button>
+                      <button onClick={() => { /* ログアウト処理 */ }} className="text-left w-full">ログアウト</button>
                     </li>
                   </ul>
                 </div>
               )}
-            </div>
+            </>
+          )}
+
+          {!name && (  // name が存在しない場合にログインボタンを表示
+            <Link href="/login">
+              <button
+                className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
+              >
+                <FaPlus />
+                ログイン
+              </button>
+            </Link>
           )}
           
-          {isLoggedIn && (
+          {name && (  // name が存在する場合に投稿ボタンを表示
             <Link href="/post">
               <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
                 <FaPlus />

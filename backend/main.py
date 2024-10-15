@@ -5,6 +5,7 @@ import jwt
 import datetime  
 from functools import wraps
 import json
+import base64
 
 app = Flask(__name__)
 SECRET_KEY = "sadjfljsiejfoj"
@@ -19,7 +20,7 @@ app.config['MYSQL_DB'] = 'qiita'
 mysql = MySQL(app)
 
 
-
+# セッション
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -38,10 +39,25 @@ def token_required(f):
         return f(*args, **kwargs)
     
     return decorated
+# セッション名前の返答
+def token(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.cookies.get('myapp_token')
+        
+        if not token:
+            return jsonify({'error': 'Token is missing!'}), 403  # 修正
 
-
-
-
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            return jsonify({'error': 'Token has expired!'}), 403
+        except Exception as e:
+            return jsonify({'error': 'Token is invalid!', 'details': str(e)}), 403
+        
+        name = data.get('user')  
+        return f(name=name, *args, **kwargs) 
+    return decorated
 
 @app.route("/")
 def index():
@@ -143,7 +159,7 @@ def login():
                     # JWTを作成 (有効期限を10秒に設定)
                     payload = {
                         'user': user,
-                        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1000)  # 現在時刻 + 10秒
+                        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=10000000)  # 現在時刻 +
                     }
                     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -164,7 +180,11 @@ def login():
 def special():
     return jsonify({'message': 'This is a special page for logged-in users!'})
 
-# @app.route('/confirmation_name',methods=['GET'])
+@app.route('/confirmation_name', methods=['GET'])
+@token
+def required(name):
+    return jsonify({'name': name})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
