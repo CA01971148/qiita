@@ -2,50 +2,97 @@
 
 import { FaBell, FaPlus, FaUser } from "react-icons/fa";
 import { MdOutlineSearch } from "react-icons/md";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const Header = () => {
+  // 現在のページのパス名を取得し、ナビゲーションバーの現在位置を強調表示するために使用
   const pathname = usePathname();
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの表示状態を管理
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの表示状態を管理
 
-  // ログイン状態をシミュレートするためにuseEffectでチェック
+  // 状態管理：パネルやメニューの表示・非表示を管理
+  const [isVisible, setIsVisible] = useState(false);  // 通知パネルの表示状態を管理
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  // ユーザーがログインしているかどうかを管理
+  const [isSearchOpen, setIsSearchOpen] = useState(false);  // 検索バーの表示状態を管理
+  const [isMenuOpen, setIsMenuOpen] = useState(false);  // ユーザーメニューの表示状態を管理
+
+  // DOM参照：通知パネルとメニューパネルのDOM要素にアクセス
+  const notificationRef = useRef(null);  // 通知パネルの参照
+  const menuRef = useRef(null);  // メニューパネルの参照
+
+  // ログイン状態をシミュレートするために useEffect でチェック
   useEffect(() => {
-    const userLoggedIn = true; // ダミーデータ: 実際には認証サービスからのデータを使用
-    setIsLoggedIn(userLoggedIn);
+    // ダミーデータ: 実際には認証サービスからのデータを使用することが一般的
+    const userLoggedIn = true;  
+    setIsLoggedIn(userLoggedIn);  // ログイン状態をセット
   }, []);
 
-  // クリックで通知欄の表示/非表示を切り替える
+  // 通知パネルの表示/非表示を切り替える関数
   const toggleNotification = () => {
-    setIsVisible(!isVisible);
+    setIsVisible(!isVisible);  // 現在の状態の反転
   };
 
-  // 検索バーの表示/非表示を切り替える
+  // 検索バーの表示/非表示を切り替える関数（モバイル向け）
   const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
+    setIsSearchOpen(!isSearchOpen);  // 現在の状態の反転
   };
 
-  // メニューの表示/非表示を切り替える
+  // メニューの表示/非表示を切り替える関数
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen(!isMenuOpen);  // 現在の状態の反転
   };
 
+  // メニュー外クリックでメニューを閉じる処理
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // メニューが開いている時にだけ、処理を行う
+      if (isMenuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false);  // メニュー外をクリックされたら閉じる
+      }
+    };
+
+    // ドキュメント全体にクリックイベントリスナーを追加
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      // コンポーネントのクリーンアップ時にイベントリスナーを削除
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);  // isMenuOpenが変わるたびに処理を更新
+
+  // 通知パネル外クリックで通知を閉じる処理
+  useEffect(() => {
+    const handleClickOutsideNotification = (e) => {
+      // 通知パネルが開いている時にだけ処理を行う
+      if (isVisible && notificationRef.current && !notificationRef.current.contains(e.target)) {
+        setIsVisible(false);  // 通知パネル外をクリックされたら閉じる
+      }
+    };
+
+    // ドキュメント全体にクリックイベントリスナーを追加
+    document.addEventListener("mousedown", handleClickOutsideNotification);
+
+    return () => {
+      // コンポーネントのクリーンアップ時にイベントリスナーを削除
+      document.removeEventListener("mousedown", handleClickOutsideNotification);
+    };
+  }, [isVisible]);  // isVisibleが変わるたびに処理を更新
+
+  // ログイン処理（サンプルとしてダミーの処理）
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    setIsLoggedIn(true);  // ログイン状態にする
   };
 
+  // ログアウト処理（サンプルとしてダミーの処理）
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    setIsLoggedIn(false);  // ログアウト状態にする
   };
 
   return (
     <header className="border-b border-gray-300">
-      {/* 上部ヘッダー */}
+      {/* 上部ヘッダー：ロゴ、検索、通知、ログイン/ユーザーメニュー */}
       <div className="flex justify-between items-center p-4 bg-blue-400 relative">
+        {/* ロゴ部分 */}
         <Link href="/">
           <div className="text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center">
             ITM
@@ -56,7 +103,7 @@ const Header = () => {
           {/* モバイル向け検索アイコン */}
           <MdOutlineSearch
             className="text-3xl cursor-pointer lg:hidden"
-            onClick={toggleSearch}
+            onClick={toggleSearch}  // クリックで検索バーをトグル
           />
 
           {/* デスクトップ向け検索バー */}
@@ -69,17 +116,22 @@ const Header = () => {
             />
           </div>
 
+          {/* 通知アイコン（ログイン中のみ表示） */}
           {isLoggedIn && (
             <FaBell
               className="text-xl cursor-pointer mx-2"
-              onClick={toggleNotification}
+              onClick={toggleNotification}  // 通知パネルのトグル処理
               size={30}
               color={"yellow"}
             />
           )}
 
+          {/* 通知パネル（ログイン中かつ通知が開かれている時のみ表示） */}
           {isVisible && isLoggedIn && (
-            <div className="absolute right-0 top-14 w-64 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
+            <div
+              className="absolute right-0 top-14 w-64 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95"
+              ref={notificationRef}  // 通知パネルに ref を紐付けて外部クリック処理を実行可能に
+            >
               <h3 className="font-bold border-b border-black p-0 m-0">通知</h3>
               <ul>
                 <li className="pb-2">新しいメッセージがあります。</li>
@@ -89,10 +141,10 @@ const Header = () => {
             </div>
           )}
 
-          {/* ログインしていないときはログインボタンを表示 */}
+          {/* ログインしていない場合に表示されるログインボタン */}
           {!isLoggedIn && (
             <button
-              onClick={handleLogin}
+              onClick={handleLogin}  // ログイン処理を実行
               className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
             >
               <FaPlus />
@@ -100,16 +152,16 @@ const Header = () => {
             </button>
           )}
 
-          {/* ログインしている場合はユーザーアイコンを表示 */}
+          {/* ログインしている場合に表示されるユーザーアイコンとメニュー */}
           {isLoggedIn && (
-            <div className="relative">
+            <div className="relative" ref={menuRef}>
               <FaUser
                 className="text-xl cursor-pointer"
-                onClick={toggleMenu} // クリックでメニュー表示をトグル
+                onClick={toggleMenu}  // メニュー表示をトグル
                 size={30}
               />
 
-              {/* トグルメニュー */}
+              {/* ユーザーメニュー（開かれている場合のみ表示） */}
               {isMenuOpen && (
                 <div className="absolute right-0 top-14 w-48 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
                   <ul className="flex flex-col gap-2">
@@ -118,7 +170,7 @@ const Header = () => {
                     </li>
                     <li>
                       <button
-                        onClick={handleLogout}
+                        onClick={handleLogout}  // ログアウト処理を実行
                         className="text-left w-full"
                       >
                         ログアウト
@@ -130,6 +182,7 @@ const Header = () => {
             </div>
           )}
 
+          {/* 投稿ボタン（ログイン中のみ表示） */}
           {isLoggedIn && (
             <Link href="/post">
               <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
@@ -141,7 +194,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* 検索バー: モバイル向け、アイコンをクリックで表示 */}
+      {/* 検索バー（モバイル向け、アイコンをクリックで表示） */}
       {isSearchOpen && (
         <div className="w-full px-4 py-2 bg-gray-100 border-b border-gray-300 lg:hidden">
           <input
@@ -154,6 +207,7 @@ const Header = () => {
 
       {/* 下部ナビゲーションバー */}
       <nav className="flex justify-around bg-gray-800 text-white py-2">
+        {/* 現在のパス名に基づいて現在位置を強調表示 */}
         <Link
           href="/"
           className={`${pathname === "/" ? "border-b-2 border-white" : ""}`}
