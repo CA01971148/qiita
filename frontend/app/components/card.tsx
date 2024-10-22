@@ -4,7 +4,7 @@ import { useState } from "react";
 import { handleClick } from "../utils/handleclick";
 
 export default function Card(props:any) {
-  const { id, title, description, tags, score, date } = props; // プロパティを受け取る
+  const { id, title, description, tags, score, date ,name} = props; // プロパティを受け取る
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(10);
 
@@ -12,12 +12,12 @@ export default function Card(props:any) {
 
     <>
       {/*カードの大枠を定義 */}
-        <div className="h-72 sm:w-80 md:w-96 my-2 mx-auto rounded-md border border-gray-400 bg-teal-100">
+        <div className="h-72 sm:w-96 sm:h-auto md:w-96 my-2 mx-auto rounded-md border border-gray-400 bg-teal-100">
           <div className="inline-block align-top p-2">
               <img className="w-16 h-16 rounded-full" src="共食いタコ.png" alt="Avatar" />
           </div>
           <div className="inline-block align-top p-2 items-center">
-              <p className="text-gray-900 leading-none">ユーザー名</p>
+              <p className="text-gray-900 leading-none">{name}</p>
               <p className="text-gray-600">{date}</p>
           </div>
 

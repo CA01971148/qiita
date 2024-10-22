@@ -11,6 +11,7 @@ type CardData = {
   score: number;
   date: string;
   categoryId: number;
+  name:string;
 };
 
 export default function Timeline() {
@@ -39,6 +40,7 @@ export default function Timeline() {
           score: item[4],
           date: item[5],
           categoryId: item[6],
+          name:item[7]
         }));
 
         setCards(formattedData);

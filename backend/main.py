@@ -13,8 +13,8 @@ CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://local
 
 # MySQL接続情報を設定
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root' 
-app.config['MYSQL_PASSWORD'] = 'Shoma0517!'
+app.config['MYSQL_USER'] = 'jugon' 
+app.config['MYSQL_PASSWORD'] = '8520'
 app.config['MYSQL_DB'] = 'qiita'
 
 mysql = MySQL(app)
@@ -72,7 +72,23 @@ def index():
 @app.route("/order/time",methods=['GET'])
 def get_order_time():
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM card ORDER BY time DESC')
+    cur.execute("""
+    SELECT 
+        c.cardid,
+        c.name,
+        c.detail,
+        c.tag,
+        c.heart,
+        c.time,
+        c.userid,
+        a.user AS username
+    FROM 
+        card c
+    JOIN 
+        account a ON c.userid = a.userid
+    ORDER BY 
+        c.time DESC;  -- timeの降順で並べる
+    """)
     data = cur.fetchall()
     cur.close()
     return jsonify(data)
@@ -80,7 +96,22 @@ def get_order_time():
 @app.route("/order/trend",methods=['GET'])
 def get_order_trend():
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM card ORDER BY heart DESC')
+    cur.execute("""
+    SELECT 
+        c.cardid,
+        c.name,
+        c.detail,
+        c.tag,
+        c.heart,
+        c.time,
+        c.userid,
+        a.user AS username
+    FROM 
+        card c
+    JOIN 
+        account a ON c.userid = a.userid
+    ORDER BY heart DESC
+    """)
     data = cur.fetchall()
     cur.close()
     return jsonify(data)
