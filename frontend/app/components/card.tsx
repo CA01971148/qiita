@@ -3,9 +3,19 @@
 import { useState } from "react";
 import { handleClick } from "../utils/handleclick";
 
-export default function Card() {
+interface CardData {
+  id: number;
+  title: string;
+  detail: string;
+  tags: string[];
+  hearts: number;
+  date: string;
+  order: number;
+}
+
+export default function Card(props: CardData) {
   const [liked, setLiked] = useState(false);
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(props.hearts);
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex my-8 ">
       <div
@@ -23,22 +33,28 @@ export default function Card() {
             />
             <div className="text-sm">
               <p className="text-gray-900 leading-none">ユーザー名</p>
-              <p className="text-gray-600">Aug 18</p>
+              <p className="text-gray-600">{props.date}</p>
             </div>
           </div>
           <div className="px-6 pt-4 pb-2 text-gray-900 font-bold text-xl mb-2">
-            Can coffee make you a better developer?
+            {props.title}
           </div>
           <div className="px-6 pt-4 ">
-            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-              #photography
-            </span>
-            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-              #travel
-            </span>
-            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-              #winter
-            </span>
+            {props.tags && props.tags.length > 0 ? (
+              props.tags.map((tag) => {
+                return (
+                  <span
+                    key={tag}
+                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                  >
+                    {tag}
+                  </span>
+                );
+              })
+            ) : (
+              <p>No tags available</p>
+            )}
+
             <p className="">
               <button onClick={() => handleClick(liked, setLiked)}>
                 <span
