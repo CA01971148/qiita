@@ -1,0 +1,22 @@
+{
+  "posts": [
+    {
+      "id": 8,
+      "title": "Card 8",
+      "detail": "Detail of card 8",
+      "tags": ["tag5", "tag9"],
+      "hearts": 41,
+      "date": "Sun, 22 Sep 2024 14:10:54 GMT",
+      "order": 8
+    },
+    {
+      "id": 3,
+      "title": "Card 3",
+      "detail": "Detail of card 3",
+      "tags": ["tag2", "tag4"],
+      "hearts": 5600,
+      "date": "Sun, 22 Sep 2024 14:10:54 GMT",
+      "order": 3
+    }
+  ]
+}
