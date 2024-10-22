@@ -63,9 +63,13 @@ export default function Timeline() {
   return (
     <>
       <Header />
-      {cards.map(card => (
-        <Card key={card.id} {...card} />
-      ))}
+      <div className="flex flex-col md:flex-wrap md:flex-row">
+        {cards.map((card, index) => (
+          <div key={card.id} className="w-full md:w-1/2">
+            <Card {...card} />
+          </div>
+        ))}
+      </div>
     </>
   );
 }
