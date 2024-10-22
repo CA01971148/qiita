@@ -18,7 +18,7 @@ export default function Trend() {
   const [cardData, setCardData] = useState<CardData[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/posts")
+    fetch("http://localhost:3001/posts")
       .then((response) => response.json())
       .then((data) => setCardData(data));
   }, []);
