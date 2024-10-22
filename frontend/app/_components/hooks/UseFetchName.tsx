@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 const UseFetchName = () => {
     const [name, setName] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const [id,setId] = useState<number>();
 
     useEffect(() => {
         const fetchName = async () => {
@@ -21,6 +22,7 @@ const UseFetchName = () => {
                     setError(data.error);
                 } else {
                     setName(data.name);
+                    setId(data.id)
                 }
             } catch (error) { 
                 setError('処理がうまくいきませんでした'); 
@@ -30,7 +32,7 @@ const UseFetchName = () => {
         fetchName();
     }, []);
 
-    return { name, error };
+    return { name, error ,id };
 };
 
 export default UseFetchName;

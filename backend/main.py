@@ -55,8 +55,9 @@ def token(f):
         except Exception as e:
             return jsonify({'error': 'Token is invalid!', 'details': str(e)}), 403
         
-        name = data.get('user')  
-        return f(name=name, *args, **kwargs) 
+        name = data.get('user')
+        id = data.get('id') 
+        return f(name=name, id = id,*args, **kwargs) 
     return decorated
 
 @app.route("/")
@@ -139,26 +140,26 @@ def card_add():
 def login():
     cur = mysql.connection.cursor()
     data = request.json
-    {'success':False}
+    
     try:
         if request.method == 'POST':
             user = data.get('name')
             pw = data.get('password')
-            
-            cur = mysql.connection.cursor()
-            
-            cur.execute("SELECT user, pas from account where user = %s",(user,))
+
+            cur.execute("SELECT user, pas, userid FROM account WHERE user = %s", (user,))
             data2 = cur.fetchall()
             cur.close()
+
             if data2:
                 if data2[0][1] == pw:
-                    
                     if not user or not pw:
                         return jsonify({'error': 'user and pw are required.'}), 400
 
                     # JWTを作成 (有効期限を10秒に設定)
+                    id = data2[0][2]  # idを取得
                     payload = {
                         'user': user,
+                        'id': id,  # idをペイロードに追加
                         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=10000000)  # 現在時刻 +
                     }
                     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -166,14 +167,15 @@ def login():
                     if isinstance(token, bytes):
                         token = token.decode('utf-8')
 
-                    response = make_response(jsonify({'message': 'Token created','success':True}))
+                    response = make_response(jsonify({'message': 'Token created', 'success': True}))
                     response.set_cookie('myapp_token', token, httponly=True, secure=False)
 
                     return response
                 else:
-                    return jsonify({'success':False}),202
+                    return jsonify({'success': False}), 202
     except Exception as e:
-        return jsonify({'error': str(e),'success':False}), 500
+        return jsonify({'error': str(e), 'success': False}), 500
+
 
 @app.route('/special', methods=['GET'])
 @token_required
@@ -182,8 +184,17 @@ def special():
 
 @app.route('/confirmation_name', methods=['GET'])
 @token
-def required(name):
-    return jsonify({'name': name})
+def required(name,id):
+    return jsonify({'name': name,'id':id})
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    try:
+        response = make_response(jsonify({'message': 'Logged out successfully', 'success': True}))
+        response.set_cookie('myapp_token', '', expires=0, httponly=True, secure=False)
+        return response
+    except Exception as e:
+        return jsonify({'error': str(e), 'success': False}), 500
 
 
 if __name__ == "__main__":

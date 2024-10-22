@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import UseFetchName from '../_components/hooks/UseFetchName'
+import Logout from '../_components/hooks/Logout'
 
 const Header = () => {
   const pathname = usePathname();
@@ -13,8 +14,8 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの表示状態を管理
   const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの表示状態を管理
 
-  const { name, error } = UseFetchName();
-
+  const { name, error ,id} = UseFetchName();
+  console.log(id)
   // クリックで通知欄の表示/非表示を切り替える
   const toggleNotification = () => {
     setIsVisible(!isVisible);
@@ -77,7 +78,7 @@ const Header = () => {
                       <Link href="/mypage">マイページ</Link>
                     </li>
                     <li>
-                      <button onClick={() => { /* ログアウト処理 */ }} className="text-left w-full">ログアウト</button>
+                      <button onClick={Logout} className="text-left w-full">ログアウト</button>
                     </li>
                   </ul>
                 </div>
