@@ -15,7 +15,6 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの表示状態を管理
 
   const { name, error ,id} = UseFetchName();
-  console.log(id)
   // クリックで通知欄の表示/非表示を切り替える
   const toggleNotification = () => {
     setIsVisible(!isVisible);

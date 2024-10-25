@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { handleClick } from "../utils/handleclick";
-
+import UseFetchName from '../_components/hooks/UseFetchName'
 export default function Card(props:any) {
-  const { id, title, description, tags, score, date ,name} = props; // プロパティを受け取る
+  const { card_id, title, description, tags, score, date ,user} = props; // プロパティを受け取る
   const [liked, setLiked] = useState(false);
-  const [count, setCount] = useState(10);
 
+  const {name,id} = UseFetchName()
+ 
   return (
-
     <>
       {/*カードの大枠を定義 */}
         <div className="h-72 sm:w-96 sm:h-auto md:w-96 my-2 mx-auto rounded-md border border-gray-400 bg-teal-100">
@@ -17,7 +17,7 @@ export default function Card(props:any) {
               <img className="w-16 h-16 rounded-full" src="共食いタコ.png" alt="Avatar" />
           </div>
           <div className="inline-block align-top p-2 items-center">
-              <p className="text-gray-900 leading-none">{name}</p>
+              <p className="text-gray-900 leading-none">{user}</p>
               <p className="text-gray-600">{date}</p>
           </div>
 
@@ -28,8 +28,8 @@ export default function Card(props:any) {
                 ))}
                 <p className="">
                   <button onClick={() => handleClick(liked, setLiked)}>
-                    <span className={`i-heroicons-solid-heart w-10 h-10 mt-3 ${liked ? "" : "text-red-500"}`}></span>
-                    {liked ? `${score}` : `${score + 1}`}
+                    <span className={`i-heroicons-solid-heart w-10 h-10 mt-3 text-red-500`}></span>
+                    {score}
                   </button>
                 </p>
             </div>
