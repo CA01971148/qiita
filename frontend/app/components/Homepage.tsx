@@ -22,7 +22,7 @@ const HomePage = () => {
           </Link>
           <Link href="/tags/webdevelopment">
             <li className="flex items-center hover:underline">
-              <FaGlobe className="mr-2 text-green-500" /> WebDevelopment
+              <FaGlobe className="mr-2 text-green-500" /> WebDev
             </li>
           </Link>
         </ul>

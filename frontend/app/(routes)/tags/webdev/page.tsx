@@ -6,7 +6,7 @@ function page() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <h1 className="flex-grow">WebDevelopmentのページです!</h1>
+      <h1 className="flex-grow">WebDevのページです!</h1>
       <Footer />
     </div>
   );
