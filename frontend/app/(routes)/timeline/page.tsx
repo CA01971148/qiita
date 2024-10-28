@@ -2,7 +2,7 @@
 import Card from "@/app/components/card";
 import Header from "@/app/components/Header";
 import React, { useEffect, useState } from "react";
-
+import Footer from '../../components/Footer'
 type CardData = {
   id: number;
   title: string;
@@ -72,6 +72,7 @@ export default function Timeline() {
           </div>
         ))}
       </div>
+      <Footer/>
     </>
   );
 }
