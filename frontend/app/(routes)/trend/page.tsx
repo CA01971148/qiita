@@ -2,6 +2,7 @@
 import Card from "@/app/components/card";
 import Header from "@/app/components/Header";
 import React, { useEffect, useState } from "react";
+import Footer from '../../components/Footer'
 
 type CardData = {
   id: number;
@@ -11,7 +12,7 @@ type CardData = {
   score: number;
   date: string;
   categoryId: number;
-  name:string;
+  user:string;
 };
 
 export default function Trend() {
@@ -39,7 +40,7 @@ export default function Trend() {
           score: item[4],
           date: item[5],
           categoryId: item[6],
-          name:item[7]
+          user:item[7]
         }));
 
         setCards(formattedData);
@@ -71,6 +72,7 @@ export default function Trend() {
           </div>
         ))}
       </div>
+      <Footer/>
     </>
   )
 }
