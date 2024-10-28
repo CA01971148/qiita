@@ -53,32 +53,34 @@ const HomePage = () => {
         <div className="mt-2 overflow-x-auto">
           <div className="flex space-x-4">
             {/* 記事カードの1つ目 */}
-            <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                {/* 丸いアイコン */}
-                <p className="text-gray-600 font-bold ml-2">@123456</p>
-                {/* ユーザーID */}
+            <Link href="/card">
+              <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
+                <div className="flex items-center mb-4">
+                  <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+                  {/* 丸いアイコン */}
+                  <p className="text-gray-600 font-bold ml-2">@123456</p>
+                  {/* ユーザーID */}
+                </div>
+                <div className="flex justify-between text-gray-500 text-sm mb-4">
+                  <p>2023/01/01</p> {/* 記事の日付 */}
+                </div>
+                <Link href="/card">
+                  <h2 className="text-xl font-semibold mb-2 hover:underline">
+                    記事のタイトル
+                  </h2>
+                </Link>
+                {/* 記事タイトル */}
+                {/* タグ表示 */}
+                <div className="flex flex-wrap space-x-2 mb-4">
+                  <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
+                    タグ1
+                  </span>
+                  <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
+                    タグ2
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between text-gray-500 text-sm mb-4">
-                <p>2023/01/01</p> {/* 記事の日付 */}
-              </div>
-              <Link href="/card">
-                <h2 className="text-xl font-semibold mb-2 hover:underline">
-                  記事のタイトル
-                </h2>
-              </Link>
-              {/* 記事タイトル */}
-              {/* タグ表示 */}
-              <div className="flex flex-wrap space-x-2 mb-4">
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ1
-                </span>
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ2
-                </span>
-              </div>
-            </div>
+            </Link>
 
             {/* 2つ目の記事カード */}
             <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
