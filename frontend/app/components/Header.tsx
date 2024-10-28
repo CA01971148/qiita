@@ -1,20 +1,55 @@
 "use client";
 
 import { FaBell, FaPlus, FaUser } from "react-icons/fa";
-import { MdOutlineSearch } from 'react-icons/md';
-import { useState } from "react";
+import { MdOutlineSearch } from "react-icons/md";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import UseFetchName from '../_components/hooks/UseFetchName';
-import Logout from '../_components/hooks/Logout';
 
 const Header = () => {
   const pathname = usePathname();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  
-  const { name } = UseFetchName();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // ユーザーのログイン状態
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false); // 通知パネルの状態
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの状態
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの状態
+
+  const notificationRef = useRef(null); // 通知パネルの参照
+  const menuRef = useRef(null); // メニューパネルの参照
+
+  // ダミーのログイン状態を設定（実際には認証サービスを利用）
+  useEffect(() => {
+    const userLoggedIn = true; // ここを実際の認証サービスに変更
+    setIsLoggedIn(userLoggedIn);
+  }, []);
+
+  // メニュー外クリックでメニューを閉じる処理
+  useEffect(() => {
+    const handleClickOutside = (e:any) => {
+      if (isMenuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  // 通知パネル外クリックで通知を閉じる処理
+  useEffect(() => {
+    const handleClickOutsideNotification = (e:any) => {
+      if (isNotificationOpen && notificationRef.current && !notificationRef.current.contains(e.target)) {
+        setIsNotificationOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutsideNotification);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideNotification);
+    };
+  }, [isNotificationOpen]);
 
   const toggleNotification = () => {
     setIsNotificationOpen(!isNotificationOpen);
@@ -28,9 +63,16 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <header className="border-b border-gray-300">
-      {/* 上部ヘッダー */}
       <div className="flex justify-between items-center p-4 bg-blue-400 relative">
         <Link href="/">
           <div className="text-2xl bg-white w-20 h-10 rounded-full font-bold flex items-center justify-center">
@@ -39,13 +81,8 @@ const Header = () => {
         </Link>
 
         <div className="flex justify-end items-center">
-          {/* モバイル向け検索アイコン */}
-          <MdOutlineSearch
-            className="text-3xl cursor-pointer lg:hidden"
-            onClick={toggleSearch}
-          />
+          <MdOutlineSearch className="text-3xl cursor-pointer lg:hidden" onClick={toggleSearch} />
 
-          {/* デスクトップ向け検索バー */}
           <div className="relative w-80 hidden lg:block">
             <MdOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
@@ -55,19 +92,36 @@ const Header = () => {
             />
           </div>
 
-          {name && (  // name が存在する場合にアイコンを表示
-            <>
+          {isLoggedIn && (
+            <div className="relative" ref={notificationRef}>
               <FaBell
                 className="text-xl cursor-pointer mx-2"
                 onClick={toggleNotification}
-                size={30} color={'yellow'}
-              />
-              <FaUser
-                className="text-xl cursor-pointer"
-                onClick={toggleMenu}
                 size={30}
+                color={"yellow"}
               />
-              {/* ユーザーメニュー */}
+              {isNotificationOpen && (
+                <div className="absolute right-0 top-14 w-64 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
+                  <h3 className="font-bold border-b border-black p-0 m-0">通知</h3>
+                  <ul>
+                    <li className="pb-2">新しいメッセージがあります。</li>
+                    <li className="pt-2">更新があります。</li>
+                    <li className="pt-2">新しいコメントが投稿されました。</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {!isLoggedIn && (
+            <button onClick={handleLogin} className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
+              <FaPlus /> ログイン
+            </button>
+          )}
+
+          {isLoggedIn && (
+            <div className="relative" ref={menuRef}>
+              <FaUser className="text-xl cursor-pointer" onClick={toggleMenu} size={30} />
               {isMenuOpen && (
                 <div className="absolute right-0 top-14 w-48 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
                   <ul className="flex flex-col gap-2">
@@ -75,35 +129,24 @@ const Header = () => {
                       <Link href="/mypage">マイページ</Link>
                     </li>
                     <li>
-                      <button onClick={Logout} className="text-left w-full">ログアウト</button>
+                      <button onClick={handleLogout} className="text-left w-full">ログアウト</button>
                     </li>
                   </ul>
                 </div>
               )}
-            </>
+            </div>
           )}
 
-          {!name && (  // name が存在しない場合にログインボタンを表示
-            <Link href="/login">
-              <button className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
-                <FaPlus />
-                ログイン
-              </button>
-            </Link>
-          )}
-
-          {name && (  // name が存在する場合に投稿ボタンを表示
+          {isLoggedIn && (
             <Link href="/post">
               <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
-                <FaPlus />
-                投稿する
+                <FaPlus /> 投稿する
               </button>
             </Link>
           )}
         </div>
       </div>
 
-      {/* 検索バー: モバイル向け、アイコンをクリックで表示 */}
       {isSearchOpen && (
         <div className="w-full px-4 py-2 bg-gray-100 border-b border-gray-300 lg:hidden">
           <input
@@ -114,28 +157,10 @@ const Header = () => {
         </div>
       )}
 
-      {/* 下部ナビゲーションバー */}
       <nav className="flex justify-around bg-gray-800 text-white py-2">
-        <Link
-          href="/"
-          className={`${pathname === "/" ? "border-b-2 border-white" : ""}`}
-        >
-          ホーム
-        </Link>
-
-        <Link
-          href="/timeline"
-          className={`${pathname === "/timeline" ? "border-b-2 border-white" : ""}`}
-        >
-          タイムライン
-        </Link>
-
-        <Link
-          href="/trend"
-          className={`${pathname === "/trend" ? "border-b-2 border-white" : ""}`}
-        >
-          トレンド
-        </Link>
+        <Link href="/" className={`${pathname === "/" ? "border-b-2 border-white" : ""}`}>ホーム</Link>
+        <Link href="/timeline" className={`${pathname === "/timeline" ? "border-b-2 border-white" : ""}`}>タイムライン</Link>
+        <Link href="/trend" className={`${pathname === "/trend" ? "border-b-2 border-white" : ""}`}>トレンド</Link>
       </nav>
     </header>
   );
