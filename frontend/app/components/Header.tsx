@@ -2,30 +2,28 @@
 
 import { FaBell, FaPlus, FaUser } from "react-icons/fa";
 import { MdOutlineSearch } from 'react-icons/md';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import UseFetchName from '../_components/hooks/UseFetchName'
-import Logout from '../_components/hooks/Logout'
+import UseFetchName from '../_components/hooks/UseFetchName';
+import Logout from '../_components/hooks/Logout';
 
 const Header = () => {
   const pathname = usePathname();
-  const [isVisible, setIsVisible] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの表示状態を管理
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの表示状態を管理
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  
+  const { name } = UseFetchName();
 
-  const { name, error ,id} = UseFetchName();
-  // クリックで通知欄の表示/非表示を切り替える
   const toggleNotification = () => {
-    setIsVisible(!isVisible);
+    setIsNotificationOpen(!isNotificationOpen);
   };
 
-  // 検索バーの表示/非表示を切り替える
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
   };
 
-  // メニューの表示/非表示を切り替える
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -66,10 +64,10 @@ const Header = () => {
               />
               <FaUser
                 className="text-xl cursor-pointer"
-                onClick={toggleMenu} // クリックでメニュー表示をトグル
+                onClick={toggleMenu}
                 size={30}
               />
-              {/* トグルメニュー */}
+              {/* ユーザーメニュー */}
               {isMenuOpen && (
                 <div className="absolute right-0 top-14 w-48 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
                   <ul className="flex flex-col gap-2">
@@ -87,15 +85,13 @@ const Header = () => {
 
           {!name && (  // name が存在しない場合にログインボタンを表示
             <Link href="/login">
-              <button
-                className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
-              >
+              <button className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
                 <FaPlus />
                 ログイン
               </button>
             </Link>
           )}
-          
+
           {name && (  // name が存在する場合に投稿ボタンを表示
             <Link href="/post">
               <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">

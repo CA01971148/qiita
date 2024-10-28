@@ -1,8 +1,10 @@
 "use client";
 
-// import { FaBell, FaPlus } from "react-icons/fa";
+import { FaFacebook, FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6"
 // import { useState, useEffect } from "react";
 // import { usePathname } from "next/navigation";
+
 import Link from "next/link";
 
 const Footer = () => {
@@ -39,13 +41,13 @@ const Footer = () => {
         {/* 下部のソーシャルメディアリンク（仮のアイコン） */}
         <div className="flex justify-center space-x-6">
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
-            Twitter
+            <FaXTwitter size={24} /> {/* Twitterアイコン */}
           </a>
           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
-            Facebook
+            <FaFacebook size={24} /> {/* Facebookアイコン */}
           </a>
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
-            Instagram
+            <FaInstagram size={24} /> {/* Instagramアイコン */}
           </a>
         </div>
       </div>
