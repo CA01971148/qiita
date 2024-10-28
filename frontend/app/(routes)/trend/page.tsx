@@ -30,6 +30,7 @@ export default function Trend() {
         .sort((a, b) => b.hearts - a.hearts)
         .map((card) => (
           <Card
+            key={card.id}
             id={card.id}
             title={card.title}
             detail={card.detail}

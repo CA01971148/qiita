@@ -30,6 +30,7 @@ export default function Timeline() {
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         .map((card) => (
           <Card
+            key={card.id}
             id={card.id}
             title={card.title}
             detail={card.detail}
