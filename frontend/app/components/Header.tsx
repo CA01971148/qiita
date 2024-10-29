@@ -5,23 +5,17 @@ import { MdOutlineSearch } from "react-icons/md";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import UseFetchName from '../_components/hooks/UseFetchName';
+import Logout from '../_components/hooks/Logout';
 
 const Header = () => {
   const pathname = usePathname();
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // ユーザーのログイン状態
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // 通知パネルの状態
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの状態
   const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの状態
-
+  const { name } = UseFetchName();
   const notificationRef = useRef(null); // 通知パネルの参照
   const menuRef = useRef(null); // メニューパネルの参照
-
-  // ダミーのログイン状態を設定（実際には認証サービスを利用）
-  useEffect(() => {
-    const userLoggedIn = true; // ここを実際の認証サービスに変更
-    setIsLoggedIn(userLoggedIn);
-  }, []);
 
   // メニュー外クリックでメニューを閉じる処理
   useEffect(() => {
@@ -63,13 +57,6 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
 
   return (
     <header className="border-b border-gray-300">
@@ -92,7 +79,7 @@ const Header = () => {
             />
           </div>
 
-          {isLoggedIn && (
+          {name && (
             <div className="relative" ref={notificationRef}>
               <FaBell
                 className="text-xl cursor-pointer mx-2"
@@ -113,13 +100,13 @@ const Header = () => {
             </div>
           )}
 
-          {!isLoggedIn && (
-            <button onClick={handleLogin} className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
+          {!name && (
+            <a href="/login"><button className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
               <FaPlus /> ログイン
-            </button>
+            </button></a>
           )}
 
-          {isLoggedIn && (
+          {name && (
             <div className="relative" ref={menuRef}>
               <FaUser className="text-xl cursor-pointer" onClick={toggleMenu} size={30} />
               {isMenuOpen && (
@@ -129,7 +116,7 @@ const Header = () => {
                       <Link href="/mypage">マイページ</Link>
                     </li>
                     <li>
-                      <button onClick={handleLogout} className="text-left w-full">ログアウト</button>
+                      <button onClick={Logout} className="text-left w-full">ログアウト</button>
                     </li>
                   </ul>
                 </div>
@@ -137,7 +124,7 @@ const Header = () => {
             </div>
           )}
 
-          {isLoggedIn && (
+          {name && (
             <Link href="/post">
               <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
                 <FaPlus /> 投稿する

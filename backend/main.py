@@ -46,7 +46,7 @@ def token(f):
         token = request.cookies.get('myapp_token')
         
         if not token:
-            return jsonify({'error': 'Token is missing!'}), 403  # 修正
+            return jsonify({'error': 'Token is missing!'}), 405  # 修正
 
         try:
             data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
