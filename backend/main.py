@@ -13,8 +13,8 @@ CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://local
 
 # MySQL接続情報を設定
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'jugon' 
-app.config['MYSQL_PASSWORD'] = '8520'
+app.config['MYSQL_USER'] = 'root' 
+app.config['MYSQL_PASSWORD'] = 'Hayate88131148'
 app.config['MYSQL_DB'] = 'qiita'
 
 mysql = MySQL(app)

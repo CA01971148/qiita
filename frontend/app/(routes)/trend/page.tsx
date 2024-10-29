@@ -3,7 +3,7 @@ import Card from "@/app/components/card";
 import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import React, { useEffect, useState } from "react";
-import Footer from '../../components/Footer'
+
 
 type CardData = {
   id: number;
