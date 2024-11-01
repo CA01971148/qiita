@@ -5,7 +5,6 @@ import jwt
 import datetime  
 from functools import wraps
 import json
-import base64
 
 app = Flask(__name__)
 SECRET_KEY = "sadjfljsiejfoj"
@@ -16,7 +15,10 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root' 
 app.config['MYSQL_PASSWORD'] = 'Hayate88131148'
 app.config['MYSQL_DB'] = 'qiita'
-
+app.config['MYSQL_SSL_DISABLED'] = True
+app.config['MYSQL_SSL_CERT'] = '/path/to/your/client-cert.pem'  # クライアント証明書のパス
+app.config['MYSQL_SSL_KEY'] = '/path/to/your/client-key.pem'    # クライアントキーのパス
+app.config['MYSQL_SSL_CA'] = '/path/to/your/ca-cert.pem'        # CA証明書のパス
 mysql = MySQL(app)
 
 
@@ -87,7 +89,7 @@ def get_order_time():
     JOIN 
         account a ON c.userid = a.userid
     ORDER BY 
-        c.time DESC;  -- timeの降順で並べる
+        c.time DESC;  
     """)
     data = cur.fetchall()
     cur.close()

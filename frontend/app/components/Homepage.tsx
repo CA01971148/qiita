@@ -7,7 +7,7 @@ const HomePage = () => {
   // 左サイドバーのコンテンツ
   const LeftSidebar = () => {
     return (
-      <div className="w-full sm:w-1/4 p-4 border-b sm:border-r sm:border-b-0 border-gray-300 order-2 sm:order-none">
+      <div className="w-full md:w-1/4 p-4 border-b md:border-r md:border-b-0 border-gray-300 order-2 md:order-none">
         <h2 className="font-bold text-lg">フォロー中のタグ</h2>
         <ul className="mt-2">
           {/* タグのリンク一覧 */}
@@ -47,7 +47,7 @@ const HomePage = () => {
   // メインコンテンツのコンポーネント
   const MainContent = () => {
     return (
-      <div className="w-full sm:w-1/2 p-4 border-b sm:border-r sm:border-b-0 border-gray-300 order-1 sm:order-none">
+      <div className="w-full md:w-1/2 p-4 border-b md:border-r md:border-b-0 border-gray-300 order-1 md:order-none">
         <h2 className="font-bold text-lg">トレンドの記事</h2>
         {/* 横向きスクロールが可能な記事リスト */}
         <div className="mt-2 overflow-x-auto">
@@ -64,11 +64,30 @@ const HomePage = () => {
                 <div className="flex justify-between text-gray-500 text-sm mb-4">
                   <p>2023/01/01</p> {/* 記事の日付 */}
                 </div>
-                <Link href="/card">
-                  <h2 className="text-xl font-semibold mb-2 hover:underline">
-                    記事のタイトル
-                  </h2>
-                </Link>
+                {/* <Link href="/post"> */}
+                <h2 className="text-xl font-semibold mb-2 hover:underline">
+                  記事のタイトル
+                </h2>
+                {/* </Link> */}
+                {/* import { useRouter } from 'next/router';
+
+function Component() {
+  const router = useRouter();
+
+  const handleInnerLink = (e) => {
+    e.stopPropagation();
+    router.push('/another-card');
+  };
+
+  return (
+    <Link href="/card">
+      <div onClick={() => router.push('/card')}>
+        <p>メインリンク</p>
+        <button onClick={handleInnerLink}>別のリンク</button>
+      </div>
+    </Link>
+  );
+} */}
                 {/* 記事タイトル */}
                 {/* タグ表示 */}
                 <div className="flex flex-wrap space-x-2 mb-4">
@@ -216,7 +235,7 @@ const HomePage = () => {
   // 右サイドバーのコンテンツ
   const RightSidebar = () => {
     return (
-      <div className="w-full sm:w-1/4 p-4 order-3 sm:order-none">
+      <div className="w-full md:w-1/4 p-4 order-3 md:order-none">
         <h2 className="font-bold text-lg">その他</h2>
         <ul className="mt-2">
           <li>トレンド記事1</li>
@@ -236,7 +255,7 @@ const HomePage = () => {
 
   return (
     // レスポンシブデザインで左サイドバー、メインコンテンツ、右サイドバーを配置
-    <div className="flex flex-col sm:flex-row">
+    <div className="flex flex-col md:flex-row">
       <LeftSidebar /> {/* 左サイドバー */}
       <MainContent /> {/* メインコンテンツ */}
       <RightSidebar /> {/* 右サイドバー */}
