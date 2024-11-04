@@ -5,7 +5,6 @@ import jwt
 import datetime  
 from functools import wraps
 import json
-import base64
 
 app = Flask(__name__)
 SECRET_KEY = "sadjfljsiejfoj"
