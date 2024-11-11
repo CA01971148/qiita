@@ -129,6 +129,9 @@ const Header = () => {
                       <Link href="/mypage">マイページ</Link>
                     </li>
                     <li>
+                      <Link href="/settings/account">設定</Link>
+                    </li>
+                    <li>
                       <button onClick={handleLogout} className="text-left w-full">ログアウト</button>
                     </li>
                   </ul>
