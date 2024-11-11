@@ -226,6 +226,42 @@ def logout():
     except Exception as e:
         return jsonify({'error': str(e), 'success': False}), 500
 
+@app.route('/mypage', methods=['GET'])
+def get_mypage():
+    try:
+        # クエリパラメータからデータを取得
+        name = request.args.get('name')
+        user_id = request.args.get('id')
 
+        if not name or not user_id:
+            return jsonify({"error": "入力が無効です"}), 400
+
+        cur = mysql.connection.cursor()
+        
+        # 投稿数とheartの合計を取得
+        query = """
+            SELECT COUNT(name) AS sum, COALESCE(SUM(heart), 0) AS total_heart
+            FROM card
+            WHERE userid = (
+                SELECT userid
+                FROM account
+                WHERE user = %s AND userid = %s
+            );
+        """
+        cur.execute(query, (name, user_id))
+        
+        # データの取得
+        result = cur.fetchone()
+        cur.close()
+        
+        # 結果をJSON形式で返す
+        return jsonify(result)
+    
+    except Exception as e:
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+
+
+
+    
 if __name__ == "__main__":
     app.run(debug=True)
