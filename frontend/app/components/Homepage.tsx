@@ -215,9 +215,9 @@ const HomePage = () => {
       <div className="w-full sm:w-1/4 p-4 order-3 sm:order-none">
         <h2 className="font-bold text-lg">その他</h2>
         <ul className="mt-2">
-          <li>トレンド記事1</li>
-          <li>トレンド記事2</li>
-          <li>トレンド記事3</li>
+          {cards.slice(0, 3).map((data,index)=>(
+            <li key={index}>{data.title}</li>
+          ))}
         </ul>
         {/* コラムセクション */}
         <h2 className="font-bold text-lg mt-6">コラム</h2>

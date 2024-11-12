@@ -1,10 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";  // useSearchParamsをインポート
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 
+type CardData = {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  score: number;
+  date: string;
+  categoryId: number;
+  user: string;
+};
+
 function Page() {
+  const searchParams = useSearchParams(); // URLパラメータを取得
+  const [cards, setCards] = useState<CardData>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [comments, setComments] = useState([
     {
       id: 1,
@@ -21,7 +37,54 @@ function Page() {
   ]);
   const [newComment, setNewComment] = useState("");
 
-  const handleNewCommentChange = (e) => {
+  // クエリパラメータからidを取得
+  const id = searchParams.get("id");
+
+  useEffect(() => {
+    if (!id) {
+      setError("IDが指定されていません");
+      setLoading(false);
+      return;
+    }
+    
+    const path: string = `http://localhost:5000/card/detail?id=${id}`;
+    const fetchData = async () => {
+      try {
+        const res = await fetch(path, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!res.ok) {
+          throw new Error("ネットワークの応答が正常ではありません");
+        }
+        const data = await res.json();
+        const formattedData: CardData = {
+          id: data[0],
+          title: data[1],
+          description: data[2],
+          tags: JSON.parse(data[3]),  // タグを文字列から配列に変換
+          score: data[4],
+          date: data[5],
+          categoryId: data[6],
+          user: data[7]
+        };
+
+        setCards(formattedData);
+
+        
+      } catch (err) {
+        setError("エラー");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleNewCommentChange = (e: any) => {
     setNewComment(e.target.value);
   };
 
@@ -40,39 +103,47 @@ function Page() {
     }
   };
 
+  if (loading)
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-blue-500"></div>
+      </div>
+    );
+  if (error) return <div>エラー: {error}</div>;
+  
   return (
     <div className="min-h-screen">
       <Header />
 
-      <div className="flex  flex-col items-center">
+      <div className="flex flex-col items-center">
         {/* 記事カード */}
         <div className="max-w-md w-full items-center bg-white shadow-md rounded-lg overflow-hidden mt-8 border border-black/10 p-6">
           <div className="flex items-center mb-4">
             {/* 丸いアイコン */}
             <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
             {/* ID */}
-            <p className="text-gray-600 font-bold ml-2">@123456</p>
+            <p className="text-gray-600 font-bold ml-2">@{cards?.user}</p>
           </div>
 
-          <h2 className="text-xl font-semibold mb-2">記事のタイトル</h2>
+          <h2 className="text-xl font-semibold mb-2">{cards?.title}</h2>
 
           {/* タグ */}
           <div className="flex flex-wrap space-x-2 mb-4">
-            <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-              タグ1
+            
+            
+            {cards?.tags.map((data,index)=>(
+                <span key={index} className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
+              {data}
             </span>
-            <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-              タグ2
-            </span>
+              ))}
           </div>
 
           <div className="flex justify-between text-gray-500 text-sm mb-4">
-            <p>投稿日: 2023/01/01</p>
-            <p>最終更新: 2023/02/01</p>
+            <p>投稿日: {cards?.date}</p>
           </div>
 
           <p className="text-gray-700 text-base">
-            これは記事の内容のプレビューです。全文はここでは表示されませんが、主要な情報が含まれています。
+            {cards?.description}
           </p>
         </div>
 

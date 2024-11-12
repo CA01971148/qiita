@@ -260,8 +260,25 @@ def get_mypage():
     except Exception as e:
         return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
 
-
-
-    
+@app.route('/card/detail',methods=['GET'])
+def detail():
+    try:
+        card_id = request.args.get('id')
+        if not card_id:
+            return jsonify({"error":"入力が無効です"}),400
+        cur = mysql.connection.cursor()
+        query ="""
+        SELECT card.*, account.user
+        FROM card
+        JOIN account ON card.userid = account.userid
+        WHERE card.cardid = %s;
+        """
+        cur.execute(query,(card_id))
+        result = cur.fetchone()
+        cur.close()
+        
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
 if __name__ == "__main__":
     app.run(debug=True)
