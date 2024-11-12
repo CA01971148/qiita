@@ -5,6 +5,7 @@ import jwt
 import datetime  
 from functools import wraps
 import json
+from functools import lru_cache
 
 app = Flask(__name__)
 SECRET_KEY = "sadjfljsiejfoj"
@@ -39,26 +40,30 @@ def token_required(f):
     
     return decorated
 # セッション名前の返答
+@lru_cache(maxsize=128)
+def decode_jwt(token):
+    return jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+
 def token(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.cookies.get('myapp_token')
         
         if not token:
-            return jsonify({'error': 'Token is missing!'}), 405  # 修正
+            return jsonify({'error': 'Token is missing!'}), 405
 
         try:
-            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            data = decode_jwt(token)
         except jwt.ExpiredSignatureError:
             return jsonify({'error': 'Token has expired!'}), 403
         except Exception as e:
             return jsonify({'error': 'Token is invalid!', 'details': str(e)}), 403
-        
+
         name = data.get('user')
         id = data.get('id') 
-        return f(name=name, id = id,*args, **kwargs) 
+        return f(name=name, id=id, *args, **kwargs)
+    
     return decorated
-
 @app.route("/")
 def index():
     return """

@@ -2,12 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { handleClick } from "../utils/handleclick";
-import UseFetchName from '../_components/hooks/UseFetchName'
 export default function Card(props:any) {
   const { card_id, title, description, tags, score, date ,user} = props; // プロパティを受け取る
   const [liked, setLiked] = useState(false);
-
-  const {name,id} = UseFetchName()
  
   return (
     <>
