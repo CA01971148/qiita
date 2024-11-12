@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaReact, FaJs, FaGlobe, FaUser } from "react-icons/fa"; // アイコンをインポート
-import Link from "next/link"; // Linkコンポーネントをインポート
+import Link from "next/link"; 
 
 type CardData = {
   id: number;
@@ -181,27 +181,28 @@ const HomePage = () => {
           {/* 親コンテナにflex-colを追加 */}
           <div className="flex flex-col space-y-4">
             {time.map((card)=>(
-              <div className="w-full items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                <p className="text-gray-600 font-bold ml-2">@{card.user}</p>
-              </div>
-              <div className="flex justify-between text-gray-500 text-sm mb-4">
-                <p>{card.date}</p>
-              </div>
-              <Link href="/card">
-                <h2 className="text-xl font-semibold mb-2 hover:underline">
-                  {card.title}
-                </h2>
+              <Link href={`/card?id=${card.id}`}>
+                  <div className="w-full items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+                      <p className="text-gray-600 font-bold ml-2">@{card.user}</p>
+                    </div>
+                    <div className="flex justify-between text-gray-500 text-sm mb-4">
+                      <p>{card.date}</p>
+                    </div>
+                      <h2 className="text-xl font-semibold mb-2 hover:underline">
+                        {card.title}
+                      </h2>
+                    <div className="flex flex-wrap space-x-2 mb-4">
+                      {card.tags.map((data)=>(
+                        <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
+                        {data}
+                      </span>
+                      ))}
+                    </div>
+                  </div>
               </Link>
-              <div className="flex flex-wrap space-x-2 mb-4">
-                {card.tags.map((data)=>(
-                  <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  {data}
-                </span>
-                ))}
-              </div>
-            </div>
+              
             ))}
           </div>
         </div>

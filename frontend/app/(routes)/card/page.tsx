@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";  // useSearchParamsをインポート
+import { useSearchParams } from "next/navigation"; 
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+import Link from "next/link";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 
@@ -37,18 +40,12 @@ function Page() {
   ]);
   const [newComment, setNewComment] = useState("");
 
-  const testMarkdown = `
-                        # テストタイトル
-                        これはMarkdownのテストです。
-
-                        - 項目1
-                        - 項目2
-                        - 項目3
-                        `;
+  const [previewContent, setPreviewContent] = useState('');
 
   // クエリパラメータからidを取得
   const id = searchParams.get("id");
 
+  
   useEffect(() => {
     if (!id) {
       setError("IDが指定されていません");
@@ -92,6 +89,16 @@ function Page() {
 
     fetchData();
   }, []);
+
+  // markdown処理
+  useEffect(() =>{
+    if(cards?.description)
+    {
+      const htmlContent = marked(cards?.description);
+      const sanitizedContent = DOMPurify.sanitize(htmlContent);
+      setPreviewContent(sanitizedContent);
+    }
+  },[cards?.description])
 
   const handleNewCommentChange = (e: any) => {
     setNewComment(e.target.value);
@@ -149,9 +156,12 @@ function Page() {
             <p>投稿日: {cards?.date}</p>
           </div>
 
-          <p className="text-gray-700 text-base">
-            {cards?.description}
-          </p>
+          <div
+              className='prose'
+              dangerouslySetInnerHTML={{
+                __html: previewContent, // サニタイズ済みのHTMLを設定
+              }}
+            />
         </div>
 
         {/* コメントカード */}
@@ -161,8 +171,8 @@ function Page() {
           {/* コメント一覧 */}
           <div className="space-y-4 mb-4">
             {comments.length > 0 ? (
-              comments.map((comment) => (
-                <div key={comment.id} className="bg-gray-50 p-4 rounded shadow">
+              comments.map((comment,index) => (
+                <div key={index} className="bg-gray-50 p-4 rounded shadow">
                   {/* アイコン、ID、投稿日時を横並びに配置 */}
                   <div className="flex items-center space-x-4 mb-2">
                     <div className="w-8 h-8 bg-gray-300 rounded-full"></div>

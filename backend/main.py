@@ -273,7 +273,7 @@ def detail():
         JOIN account ON card.userid = account.userid
         WHERE card.cardid = %s;
         """
-        cur.execute(query,(card_id))
+        cur.execute(query,(card_id,))
         result = cur.fetchone()
         cur.close()
         
