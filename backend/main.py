@@ -280,5 +280,18 @@ def detail():
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+@app.route('/mk',methods =['GET'])
+def mk():
+    try:
+        cur = mysql.connection.cursor()
+        query ="""
+        select detail from card where cardid = 8;
+        """
+        cur.execute(query)
+        result = cur.fetchone()
+        cur.close()
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error":str(e)}),500
 if __name__ == "__main__":
     app.run(debug=True)

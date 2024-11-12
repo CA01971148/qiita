@@ -37,6 +37,15 @@ function Page() {
   ]);
   const [newComment, setNewComment] = useState("");
 
+  const testMarkdown = `
+                        # テストタイトル
+                        これはMarkdownのテストです。
+
+                        - 項目1
+                        - 項目2
+                        - 項目3
+                        `;
+
   // クエリパラメータからidを取得
   const id = searchParams.get("id");
 
@@ -115,9 +124,9 @@ function Page() {
     <div className="min-h-screen">
       <Header />
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center relative">
         {/* 記事カード */}
-        <div className="max-w-md w-full items-center bg-white shadow-md rounded-lg overflow-hidden mt-8 border border-black/10 p-6">
+        <div className="max-w-4xl w-full items-center bg-white shadow-md rounded-lg overflow-hidden mt-8 border border-black/10 p-6">
           <div className="flex items-center mb-4">
             {/* 丸いアイコン */}
             <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
@@ -125,14 +134,12 @@ function Page() {
             <p className="text-gray-600 font-bold ml-2">@{cards?.user}</p>
           </div>
 
-          <h2 className="text-xl font-semibold mb-2">{cards?.title}</h2>
+          <h2 className="text-6xl font-semibold  mb-2">{cards?.title}</h2>
 
           {/* タグ */}
           <div className="flex flex-wrap space-x-2 mb-4">
-            
-            
             {cards?.tags.map((data,index)=>(
-                <span key={index} className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
+                <span key={index} className="bg-blue-200 text-blue-700 text-lg font-semibold px-2 py-1 rounded-full">
               {data}
             </span>
               ))}
@@ -148,7 +155,7 @@ function Page() {
         </div>
 
         {/* コメントカード */}
-        <div className="max-w-md w-full mt-8 p-6 items-center bg-white shadow-md rounded-lg border border-gray-200">
+        <div className="max-w-4xl w-full mt-8 p-6 items-center bg-white shadow-md rounded-lg border border-gray-200">
           <h3 className="text-lg font-semibold mb-4">コメント</h3>
 
           {/* コメント一覧 */}
