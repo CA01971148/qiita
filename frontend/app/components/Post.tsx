@@ -1,20 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// import { useRouter } from 'next/navigation';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import Link from "next/link";
 
 function Post() {
-  // const router = useRouter();
-
-  // const handlePostClick = () => {
-  //   setTitle('');
-  //   setTags('');
-  //   setContent('');
-  //   router.push('/');
-  // };
 
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState('');
@@ -29,7 +20,41 @@ function Post() {
       setPreviewContent(sanitizedContent);
     }
   }, [content]);
-
+  const btnpush = async () => {
+    // データを整形
+    const postData = {
+      name: title,
+      detail: content,
+      tag: tags.split(" "),  // スペース区切りのタグを配列に変換
+      userid: 1 // ユーザーIDを指定（動的に設定する場合は適宜修正）
+    };
+  
+    try {
+      // POSTリクエストを送信
+      const response = await fetch('http://localhost:5000/card/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        alert(`投稿成功: ${result.name}`);
+        setTitle("");
+        setTags("");
+        setContent("");
+      } else {
+        alert("投稿に失敗しました。");
+      }
+    } catch (error) {
+      console.error("エラー:", error);
+      alert("エラーが発生しました。");
+    }
+  };
+  
   return (
     <div>
       <header className='border-b border-gray-300'>
@@ -44,11 +69,11 @@ function Post() {
           {/* 戻るボタンと投稿ボタンを横並びに */}
           <div className='flex items-center gap-2'>
             <Link href="/">
-              <button className='bg-red-300 text-white px-2 py-1 rounded flex items-center'>
+              <button className='bg-red-300 hover:bg-red-600 text-white px-2 py-1 rounded flex items-center'>
                 戻る
               </button>
             </Link>
-            <button className='bg-green-500 text-white px-3 py-2 rounded flex items-center'>
+            <button onClick={btnpush} className='bg-green-500 hover:bg-green-700 text-white px-3 py-2 rounded flex items-center'>
               投稿!!
             </button>
           </div>

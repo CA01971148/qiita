@@ -125,7 +125,7 @@ function Page() {
         <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-blue-500"></div>
       </div>
     );
-  if (error) return <div>エラー: {error}</div>;
+  if (error) return <div className="text-5xl text-center">このカードは削除されました</div>;
   
   return (
     <div className="min-h-screen">

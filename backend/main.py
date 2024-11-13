@@ -164,7 +164,7 @@ def card_add():
     detail = data.get('detail')
     tag = json.dumps(data.get('tag'))
     userid = data.get('userid')
-    cur.execute('INSERT INTO card(name,detail,tag,heart,userid) VALUES (%s,%s,%s,"0",%s)',(name,detail,tag,userid))
+    cur.execute('INSERT INTO card(name,detail,tag,userid) VALUES (%s,%s,%s,%s)',(name,detail,tag,userid))
     mysql.connection.commit()
     if cur.rowcount == 1:
         return jsonify({'succeess':True,'name':name}),200
@@ -298,5 +298,25 @@ def mk():
         return jsonify(result)
     except Exception as e:
         return jsonify({"error":str(e)}),500
+    
+@app.route('/user_ranking',methods=['GET'])
+def rank():
+    try:
+        cur = mysql.connection.cursor()
+        query = """
+        SELECT account.user, SUM(card.heart) AS total_hearts
+        FROM card
+        JOIN account ON card.userid = account.userid
+        GROUP BY account.user
+        ORDER BY total_hearts DESC
+        LIMIT 3;
+        """
+        cur.execute(query)
+        result = cur.fetchall()
+        cur.close()
+        
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
 if __name__ == "__main__":
     app.run(debug=True)
