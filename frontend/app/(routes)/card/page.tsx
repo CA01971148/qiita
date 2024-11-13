@@ -141,7 +141,7 @@ function Page() {
             <p className="text-gray-600 font-bold ml-2">@{cards?.user}</p>
           </div>
 
-          <h2 className="text-6xl font-semibold  mb-2">{cards?.title}</h2>
+          <h2 className="text-4xl md:text-6xl font-semibold  mb-2">{cards?.title}</h2>
 
           {/* タグ */}
           <div className="flex flex-wrap space-x-2 mb-4">
