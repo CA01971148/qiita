@@ -25,8 +25,12 @@ const Header = () => {
 
   // メニュー外クリックでメニューを閉じる処理
   useEffect(() => {
-    const handleClickOutside = (e:any) => {
-      if (isMenuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
+    const handleClickOutside = (e: any) => {
+      if (
+        isMenuOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(e.target)
+      ) {
         setIsMenuOpen(false);
       }
     };
@@ -39,8 +43,12 @@ const Header = () => {
 
   // 通知パネル外クリックで通知を閉じる処理
   useEffect(() => {
-    const handleClickOutsideNotification = (e:any) => {
-      if (isNotificationOpen && notificationRef.current && !notificationRef.current.contains(e.target)) {
+    const handleClickOutsideNotification = (e: any) => {
+      if (
+        isNotificationOpen &&
+        notificationRef.current &&
+        !notificationRef.current.contains(e.target)
+      ) {
         setIsNotificationOpen(false);
       }
     };
@@ -81,7 +89,10 @@ const Header = () => {
         </Link>
 
         <div className="flex justify-end items-center">
-          <MdOutlineSearch className="text-3xl cursor-pointer lg:hidden" onClick={toggleSearch} />
+          <MdOutlineSearch
+            className="text-3xl cursor-pointer lg:hidden"
+            onClick={toggleSearch}
+          />
 
           <div className="relative w-80 hidden lg:block">
             <MdOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
@@ -102,7 +113,9 @@ const Header = () => {
               />
               {isNotificationOpen && (
                 <div className="absolute right-0 top-14 w-64 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
-                  <h3 className="font-bold border-b border-black p-0 m-0">通知</h3>
+                  <h3 className="font-bold border-b border-black p-0 m-0">
+                    通知
+                  </h3>
                   <ul>
                     <li className="pb-2">新しいメッセージがあります。</li>
                     <li className="pt-2">更新があります。</li>
@@ -114,14 +127,21 @@ const Header = () => {
           )}
 
           {!isLoggedIn && (
-            <button onClick={handleLogin} className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
+            <button
+              onClick={handleLogin}
+              className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
+            >
               <FaPlus /> ログイン
             </button>
           )}
 
           {isLoggedIn && (
             <div className="relative" ref={menuRef}>
-              <FaUser className="text-xl cursor-pointer" onClick={toggleMenu} size={30} />
+              <FaUser
+                className="text-xl cursor-pointer"
+                onClick={toggleMenu}
+                size={30}
+              />
               {isMenuOpen && (
                 <div className="absolute right-0 top-14 w-48 bg-gray-200 border border-black shadow-lg rounded-md p-4 opacity-95">
                   <ul className="flex flex-col gap-2">
@@ -132,7 +152,12 @@ const Header = () => {
                       <Link href="/settings/account">設定</Link>
                     </li>
                     <li>
-                      <button onClick={handleLogout} className="text-left w-full">ログアウト</button>
+                      <button
+                        onClick={handleLogout}
+                        className="text-left w-full"
+                      >
+                        ログアウト
+                      </button>
                     </li>
                   </ul>
                 </div>
@@ -161,9 +186,36 @@ const Header = () => {
       )}
 
       <nav className="flex justify-around bg-gray-800 text-white py-2">
-        <Link href="/" className={`${pathname === "/" ? "border-b-2 border-white" : ""}`}>ホーム</Link>
-        <Link href="/timeline" className={`${pathname === "/timeline" ? "border-b-2 border-white" : ""}`}>タイムライン</Link>
-        <Link href="/trend" className={`${pathname === "/trend" ? "border-b-2 border-white" : ""}`}>トレンド</Link>
+        <Link
+          href="/"
+          className={`${pathname === "/" ? "border-b-2 border-white" : ""}`}
+        >
+          ホーム
+        </Link>
+        <Link
+          href="/timeline"
+          className={`${
+            pathname === "/timeline" ? "border-b-2 border-white" : ""
+          }`}
+        >
+          タイムライン
+        </Link>
+        <Link
+          href="/trend"
+          className={`${
+            pathname === "/trend" ? "border-b-2 border-white" : ""
+          }`}
+        >
+          トレンド
+        </Link>
+        <Link
+          href="/production"
+          className={`${
+            pathname === "/production" ? "border-b-2 border-white" : ""
+          }`}
+        >
+          プロダクション
+        </Link>
       </nav>
     </header>
   );

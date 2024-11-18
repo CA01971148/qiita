@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 // import { useState, useEffect, useRef } from "react";
 import React from "react";
 
@@ -35,9 +35,11 @@ function Mypage() {
 
         {/* プロフィール編集ボタン */}
         <div className="mt-6">
-          <button className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
-            プロフィールを編集
-          </button>
+          <Link href="../settings/profile">
+            <button className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
+              プロフィールを編集
+            </button>
+          </Link>
         </div>
       </div>
     </div>
