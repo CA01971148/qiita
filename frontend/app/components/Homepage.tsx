@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaReact, FaJs, FaGlobe, FaUser } from "react-icons/fa"; // アイコンをインポート
 import Link from "next/link"; // Linkコンポーネントをインポート
+import Card from "./card";
 
 const HomePage = () => {
   // 左サイドバーのコンテンツ
@@ -46,89 +47,40 @@ const HomePage = () => {
 
   // メインコンテンツのコンポーネント
   const MainContent = () => {
+    const [cards, setCards] = useState<CardData[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    // http://localhost:3001/postsからデータを取得
+    useEffect(() => {
+      const requestURL = " http://localhost:3001/posts";
+
+      const fetchData = async () => {
+        try {
+          const response = await fetch(requestURL);
+
+          const data = await response.json();
+
+          setCards(data);
+        } catch {
+          0;
+          console.error("データ取得中にエラーが発生した", error);
+        }
+      };
+
+      fetchData();
+    }, []);
     return (
       <div className="w-full sm:w-1/2 p-4 border-b sm:border-r sm:border-b-0 border-gray-300 order-1 sm:order-none">
         <h2 className="font-bold text-lg">トレンドの記事</h2>
         {/* 横向きスクロールが可能な記事リスト */}
         <div className="mt-2 overflow-x-auto">
           <div className="flex space-x-4">
-            {/* 記事カードの1つ目 */}
-            <Link href="/card">
-              <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                  {/* 丸いアイコン */}
-                  <p className="text-gray-600 font-bold ml-2">@123456</p>
-                  {/* ユーザーID */}
-                </div>
-                <div className="flex justify-between text-gray-500 text-sm mb-4">
-                  <p>2023/01/01</p> {/* 記事の日付 */}
-                </div>
-                <Link href="/card">
-                  <h2 className="text-xl font-semibold mb-2 hover:underline">
-                    記事のタイトル
-                  </h2>
-                </Link>
-                {/* 記事タイトル */}
-                {/* タグ表示 */}
-                <div className="flex flex-wrap space-x-2 mb-4">
-                  <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                    タグ1
-                  </span>
-                  <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                    タグ2
-                  </span>
-                </div>
+            {cards.map((card, index) => (
+              <div key={card.id} className="w-full ">
+                <Card {...card} />
               </div>
-            </Link>
-
-            {/* 2つ目の記事カード */}
-            <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                {/* 丸いアイコン */}
-                <p className="text-gray-600 font-bold ml-2">@123456</p>
-                {/* ユーザーID */}
-              </div>
-              <div className="flex justify-between text-gray-500 text-sm mb-4">
-                <p>2023/01/01</p> {/* 記事の日付 */}
-              </div>
-              <h2 className="text-xl font-semibold mb-2">記事のタイトル</h2>
-              {/* 記事タイトル */}
-              {/* タグ表示 */}
-              <div className="flex flex-wrap space-x-2 mb-4">
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ1
-                </span>
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ2
-                </span>
-              </div>
-            </div>
-
-            {/* 3つ目の記事カード */}
-            <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                {/* 丸いアイコン */}
-                <p className="text-gray-600 font-bold ml-2">@123456</p>
-                {/* ユーザーID */}
-              </div>
-              <div className="flex justify-between text-gray-500 text-sm mb-4">
-                <p>2023/01/01</p> {/* 記事の日付 */}
-              </div>
-              <h2 className="text-xl font-semibold mb-2">記事のタイトル</h2>
-              {/* 記事タイトル */}
-              {/* タグ表示 */}
-              <div className="flex flex-wrap space-x-2 mb-4">
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ1
-                </span>
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ2
-                </span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         {/* おすすめの記事一覧 */}
