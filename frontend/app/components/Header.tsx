@@ -5,6 +5,7 @@ import { MdOutlineSearch } from "react-icons/md";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+// import { useSearchParams } from "next/navigation";
 
 const Header = () => {
   const pathname = usePathname();

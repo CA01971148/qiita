@@ -62,3 +62,22 @@
 // };
 
 // export default SearchPage;
+
+import { useRouter } from "next/router";
+
+const SearchPage = () => {
+  const router = useRouter();
+  const { query } = router.query; // URL パラメータを取得
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">検索結果</h1>
+      <p>
+        検索クエリ: <span className="font-mono text-blue-500">{query}</span>
+      </p>
+      {/* 実際の検索結果を表示する場合は API 呼び出しなどを実装 */}
+    </div>
+  );
+};
+
+export default SearchPage;
