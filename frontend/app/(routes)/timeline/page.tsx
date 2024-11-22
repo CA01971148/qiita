@@ -91,21 +91,20 @@ export default function Timeline() {
       <div className="flex flex-col sm:flex-row">
         <LeftSidebar />
         <div className="w-full sm:w-1/2 p-4 border-b sm:border-r sm:border-b-0 border-gray-300 order-1 sm:order-none">
-        <div className="mt-2">
-          {/* 親コンテナにflex-colを追加 */}
-          <div className="flex flex-col space-y-4">
-            {cards.map((card, index) => (
-              <div
-                key={card.id}
-                className="w-full rounded-md border shadow-md bg-white h-50"
-              >
-                <div className="flex items-center mb-4">
-                  <Card {...card} />
+          <div className="mt-2">
+            <div className="flex flex-col space-y-4">
+              {cards.map((card, index) => (
+                <div
+                  key={card.id}
+                  className="w-full rounded-md border shadow-md bg-white h-50"
+                >
+                  <div className="flex items-center mb-4">
+                    <Card {...card} />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
         </div>
         <RightSidebar />
       </div>
