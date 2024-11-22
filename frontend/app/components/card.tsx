@@ -19,7 +19,7 @@ export default function Card(props: any) {
           alt="Avatar"
         />
         <div>
-          <div className="ml-4 text-gray-400">@1234</div>
+          <div className="ml-4 text-gray-400">{user}</div>
           <p className="ml-4 text-gray-600 text-xs ">{date}</p>
         </div>
       </div>
