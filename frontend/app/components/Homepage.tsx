@@ -73,12 +73,17 @@ const HomePage = () => {
     return (
       <div className="w-full sm:w-1/2 p-4 border-b sm:border-r sm:border-b-0 border-gray-300 order-1 sm:order-none">
         <h2 className="font-bold text-lg">トレンドの記事</h2>
-        {/* 横向きスクロールが可能な記事リスト */}
+        {/* トレンドの記事 */}
         <div className="mt-2 overflow-x-auto">
           <div className="flex space-x-4">
             {cards.map((card, index) => (
-              <div key={card.id} className="w-full ">
-                <Card {...card} />
+              <div key={card.id} className="w-full  ">
+                <div
+                  className=" sm:w-96   md:w-96 my-2 md:mx-auto
+      mx-2 rounded-md border shadow-md bg-white"
+                >
+                  <Card {...card} />
+                </div>
               </div>
             ))}
           </div>
@@ -88,6 +93,15 @@ const HomePage = () => {
         <div className="mt-2">
           {/* 親コンテナにflex-colを追加 */}
           <div className="flex flex-col space-y-4">
+            {cards.map((card, index) => (
+              <div
+                key={card.id}
+                className="w-full rounded-md border shadow-md bg-white h-50"
+              >
+                <Card {...card} />
+              </div>
+            ))}
+
             {/* 記事カードの1つ目 */}
             <div className="w-full items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
               <div className="flex items-center mb-4">

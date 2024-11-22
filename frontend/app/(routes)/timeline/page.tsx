@@ -89,9 +89,10 @@ export default function Timeline() {
       <div className="flex flex-col md:flex-wrap md:flex-row">
         {cards.map((card, index) => (
           <div key={card.id} className="w-full md:w-1/2">
+            {/* カードの大枠の設定 */}
             <div
               className=" sm:w-96   md:w-96 my-2 md:mx-auto
-mx-2 rounded-md border border-gray-400 bg-white"
+mx-2 rounded-md border shadow-md bg-white"
             >
               <Card {...card} />
             </div>

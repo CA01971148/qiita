@@ -12,10 +12,7 @@ export default function Card(props: any) {
   return (
     <>
       {/*カードの大枠を定義 */}
-      <div
-        className="h-72 sm:w-96  sm:h-auto md:w-96 my-2 md:mx-auto
-      mx-2 rounded-md border border-gray-400 bg-white"
-      >
+      <div className="">
         {/* 画像部分 */}
         <div className="inline-block align-top p-2">
           <img
