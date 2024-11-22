@@ -4,6 +4,17 @@ import Card from "./card";
 import { LeftSidebar } from "@/app/components/LeftSidebar";
 import { RightSidebar } from "@/app/components/RightSidebar";
 
+type CardData = {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  score: number;
+  date: string;
+  categoryId: number;
+  user: string;
+};
+
 const HomePage = () => {
   const [cards, setCards] = useState<CardData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
