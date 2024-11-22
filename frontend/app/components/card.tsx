@@ -43,7 +43,7 @@ export default function Card(props: any) {
         <span
           className={` i-heroicons-solid-heart w-4 h-4  text-red-500 `}
         ></span>
-        {/* {score} */}
+        {score}
       </button>
 
       {/* <div className="max-w-sm w-full lg:max-w-full lg:flex my-8 "> */}
