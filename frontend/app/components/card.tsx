@@ -35,7 +35,7 @@ export default function Card(props: CardData) {
           <p className="ml-4 text-gray-600 text-xs ">{props.date}</p>
         </div>
       </div>
-      <Link key={props.card_id} href={`/detail`}>
+      <Link key={props.card_id} href={`/card`}>
         <div className=" ml-16 text-lg text-left text-gray-900 font-bold hover:text-sky-700 ">
           {props.title}
         </div>
