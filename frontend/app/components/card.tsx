@@ -3,8 +3,20 @@
 import { useEffect, useState } from "react";
 import { handleClick } from "../utils/handleclick";
 import UseFetchName from "../_components/hooks/UseFetchName";
-export default function Card(props: any) {
-  const { card_id, title, description, tags, score, date, user } = props; // プロパティを受け取る
+import Link from "next/link";
+
+type CardData = {
+  card_id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  score: number;
+  date: string;
+  categoryId: number;
+  user: string;
+};
+
+export default function Card(props: CardData) {
   const [liked, setLiked] = useState(false);
 
   const { name, id } = UseFetchName();
@@ -19,17 +31,18 @@ export default function Card(props: any) {
           alt="Avatar"
         />
         <div>
-          <div className="ml-4 text-gray-400">{user}</div>
-          <p className="ml-4 text-gray-600 text-xs ">{date}</p>
+          <div className="ml-4 text-gray-400">{props.user}</div>
+          <p className="ml-4 text-gray-600 text-xs ">{props.date}</p>
         </div>
       </div>
-
-      <div className=" ml-16 text-lg text-left text-gray-900 font-bold">
-        {title}
-      </div>
+      <Link key={props.card_id} href={`/detail`}>
+        <div className=" ml-16 text-lg text-left text-gray-900 font-bold hover:text-sky-700 ">
+          {props.title}
+        </div>
+      </Link>
 
       <div className="ml-14">
-        {tags.map((tag: any, index: any) => (
+        {props.tags.map((tag: string, index: number) => (
           <span
             key={index}
             className=" inline-block bg-blue-200 text-blue-700 rounded-full px-1  text-xs   mr-2   border-gray-400"
@@ -43,7 +56,7 @@ export default function Card(props: any) {
         <span
           className={` i-heroicons-solid-heart w-4 h-4  text-red-500 `}
         ></span>
-        {score}
+        {props.score}
       </button>
 
       {/* <div className="max-w-sm w-full lg:max-w-full lg:flex my-8 "> */}
