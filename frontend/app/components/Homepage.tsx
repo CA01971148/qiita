@@ -76,7 +76,7 @@ const HomePage = () => {
         {/* トレンドの記事 */}
         <div className="mt-2 overflow-x-auto">
           <div className="flex space-x-4">
-            {cards.map((card, index) => (
+            {cards.map((card) => (
               <div key={card.id} className="w-full  ">
                 <div
                   className=" sm:w-96   md:w-96 my-2 md:mx-auto
@@ -98,59 +98,13 @@ const HomePage = () => {
                 key={card.id}
                 className="w-full rounded-md border shadow-md bg-white h-50"
               >
-                <Card {...card} />
+                <div className="flex items-center mb-4">
+                  <Card {...card} />
+                </div>
               </div>
             ))}
 
             {/* 記事カードの1つ目 */}
-            <div className="w-full items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                <p className="text-gray-600 font-bold ml-2">@123456</p>
-              </div>
-              <div className="flex justify-between text-gray-500 text-sm mb-4">
-                <p>2023/01/01</p>
-              </div>
-              <Link href="/card">
-                <h2 className="text-xl font-semibold mb-2 hover:underline">
-                  記事のタイトル
-                </h2>
-              </Link>
-              <div className="flex flex-wrap space-x-2 mb-4">
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ1
-                </span>
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ2
-                </span>
-              </div>
-            </div>
-
-            {/* 記事カードの2つ目 */}
-            <div className="w-full items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                <p className="text-gray-600 font-bold ml-2">@123456</p>
-              </div>
-              <div className="flex justify-between text-gray-500 text-sm mb-4">
-                <p>2023/01/01</p>
-              </div>
-              <Link href="/card">
-                <h2 className="text-xl font-semibold mb-2 hover:underline">
-                  記事のタイトル
-                </h2>
-              </Link>
-              <div className="flex flex-wrap space-x-2 mb-4">
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ1
-                </span>
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ2
-                </span>
-              </div>
-            </div>
-
-            {/* 記事カードの3つ目 */}
             <div className="w-full items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
               <div className="flex items-center mb-4">
                 <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
