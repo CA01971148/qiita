@@ -10,43 +10,41 @@ export default function Card(props: any) {
   const { name, id } = UseFetchName();
 
   return (
-    <>
-      {/*カードの大枠を定義 */}
-      <div className="">
-        {/* 画像部分 */}
-        <div className="inline-block align-top p-2">
-          <img
-            className="w-16 h-16 bg-gray-300/50 rounded-full"
-            src="共食いタコ.png"
-            alt="Avatar"
-          />
-        </div>
-        <div className="inline-block align-middle p-2 items-center">
-          <p className="text-gray-600 font-semibold pt-4">{date}</p>
-        </div>
-
-        <div className="px-6 pb-2 mb-2 mt-5 text-4xl text-center text-gray-900 font-bold">
-          {title}
-        </div>
-        <div className="px-11 pt-4  ">
-          {tags.map((tag: any, index: any) => (
-            <span
-              key={index}
-              className="inline-block bg-blue-200 text-blue-700 rounded-full px-2 py-1 text-sm font-semibold text-xs-font-semibold mr-2 mb-2  border-gray-400"
-            >
-              {tag}
-            </span>
-          ))}
-          <p className="">
-            <button onClick={() => handleClick(liked, setLiked)}>
-              <span
-                className={`i-heroicons-solid-heart w-10 h-10 mt-3 text-red-500`}
-              ></span>
-              {score}
-            </button>
-          </p>
+    <div>
+      {/* 画像部分 */}
+      <div className="inline-block align-top p-2 pb-0  flex ">
+        <img
+          className="w-8 h-8 bg-gray-300/50 rounded-full"
+          src="共食いタコ.png"
+          alt="Avatar"
+        />
+        <div>
+          <div className="ml-4 text-gray-400">@1234</div>
+          <p className="ml-4 text-gray-600 text-xs ">{date}</p>
         </div>
       </div>
+
+      <div className=" ml-16 text-lg text-left text-gray-900 font-bold">
+        {title}
+      </div>
+
+      <div className="ml-14">
+        {tags.map((tag: any, index: any) => (
+          <span
+            key={index}
+            className=" inline-block bg-blue-200 text-blue-700 rounded-full px-1  text-xs   mr-2   border-gray-400"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <button onClick={() => handleClick(liked, setLiked)} className="ml-14">
+        <span
+          className={` i-heroicons-solid-heart w-4 h-4  text-red-500 `}
+        ></span>
+        {/* {score} */}
+      </button>
 
       {/* <div className="max-w-sm w-full lg:max-w-full lg:flex my-8 "> */}
       {/* <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title={title}></div> */}
@@ -77,6 +75,6 @@ export default function Card(props: any) {
           </div>
         </div>
       </div> */}
-    </>
+    </div>
   );
 }

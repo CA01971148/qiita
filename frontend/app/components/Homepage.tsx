@@ -103,30 +103,6 @@ const HomePage = () => {
                 </div>
               </div>
             ))}
-
-            {/* 記事カードの1つ目 */}
-            <div className="w-full items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                <p className="text-gray-600 font-bold ml-2">@123456</p>
-              </div>
-              <div className="flex justify-between text-gray-500 text-sm mb-4">
-                <p>2023/01/01</p>
-              </div>
-              <Link href="/card">
-                <h2 className="text-xl font-semibold mb-2 hover:underline">
-                  記事のタイトル
-                </h2>
-              </Link>
-              <div className="flex flex-wrap space-x-2 mb-4">
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ1
-                </span>
-                <span className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
-                  タグ2
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </div>

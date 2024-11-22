@@ -86,13 +86,13 @@ export default function Timeline() {
   return (
     <>
       <Header />
-      <div className="flex flex-col md:flex-wrap md:flex-row">
+      <div className="flex justify-center ">
         {cards.map((card, index) => (
-          <div key={card.id} className="w-full md:w-1/2">
+          <div key={card.id} className="w-full ">
             {/* カードの大枠の設定 */}
             <div
-              className=" sm:w-96   md:w-96 my-2 md:mx-auto
-mx-2 rounded-md border shadow-md bg-white"
+              className=" sm:w-96   md:w-96  md:h-40  my-2 
+mx-2 rounded-md border shadow-md bg-white  p-2"
             >
               <Card {...card} />
             </div>
