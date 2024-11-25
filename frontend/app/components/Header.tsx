@@ -1,22 +1,22 @@
 "use client";
 
-import { FaBell, FaPlus, FaUser } from "react-icons/fa";
-import { MdOutlineSearch } from "react-icons/md";
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation"; // 追加
 import Link from "next/link";
-// import { useSearchParams } from "next/navigation";
+import { MdOutlineSearch } from "react-icons/md";
+import { FaBell, FaPlus, FaUser } from "react-icons/fa";
 
 const Header = () => {
   const pathname = usePathname();
-
+  const router = useRouter(); // ルーターを初期化
   const [isLoggedIn, setIsLoggedIn] = useState(false); // ユーザーのログイン状態
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // 通知パネルの状態
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 検索バーの状態
   const [isMenuOpen, setIsMenuOpen] = useState(false); // ユーザーメニューの状態
+  const [searchQuery, setSearchQuery] = useState(""); // 検索クエリの状態
 
-  const notificationRef = useRef(null); // 通知パネルの参照
-  const menuRef = useRef(null); // メニューパネルの参照
+  const notificationRef = useRef<HTMLDivElement | null>(null); // 通知パネルの参照
+  const menuRef = useRef<HTMLDivElement | null>(null); // メニューパネルの参照
 
   // ダミーのログイン状態を設定（実際には認証サービスを利用）
   useEffect(() => {
@@ -26,11 +26,11 @@ const Header = () => {
 
   // メニュー外クリックでメニューを閉じる処理
   useEffect(() => {
-    const handleClickOutside = (e: any) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (
         isMenuOpen &&
         menuRef.current &&
-        !menuRef.current.contains(e.target)
+        !menuRef.current.contains(e.target as Node)
       ) {
         setIsMenuOpen(false);
       }
@@ -44,11 +44,11 @@ const Header = () => {
 
   // 通知パネル外クリックで通知を閉じる処理
   useEffect(() => {
-    const handleClickOutsideNotification = (e: any) => {
+    const handleClickOutsideNotification = (e: MouseEvent) => {
       if (
         isNotificationOpen &&
         notificationRef.current &&
-        !notificationRef.current.contains(e.target)
+        !notificationRef.current.contains(e.target as Node)
       ) {
         setIsNotificationOpen(false);
       }
@@ -80,6 +80,13 @@ const Header = () => {
     setIsLoggedIn(false);
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault(); // ページリロードを防止
+    if (searchQuery.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchQuery)}`); // 検索ページに遷移
+    }
+  };
+
   return (
     <header className="border-b border-gray-300">
       <div className="flex justify-between items-center p-4 bg-blue-400 relative">
@@ -95,15 +102,21 @@ const Header = () => {
             onClick={toggleSearch}
           />
 
-          <div className="relative w-80 hidden lg:block">
+          <form
+            onSubmit={handleSearch}
+            className="relative w-80 hidden lg:block"
+          >
             <MdOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
               type="text"
               placeholder="記事、質問を検索..."
               className="w-full pl-10 p-2 border border-gray-300 rounded outline-none"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </div>
+          </form>
 
+          {/* ログイン状態に応じた通知やメニュー */}
           {isLoggedIn && (
             <div className="relative" ref={notificationRef}>
               <FaBell
@@ -130,7 +143,7 @@ const Header = () => {
           {!isLoggedIn && (
             <button
               onClick={handleLogin}
-              className="bg-orange-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex"
+              className="bg-orange-500 text-white mx-2 px-3 py-2 rounded items-center gap-2 hidden lg:flex"
             >
               <FaPlus /> ログイン
             </button>
@@ -168,7 +181,7 @@ const Header = () => {
 
           {isLoggedIn && (
             <Link href="/post">
-              <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded flex items-center gap-2 hidden lg:flex">
+              <button className="bg-green-500 text-white mx-2 px-3 py-2 rounded items-center gap-2 hidden lg:flex">
                 <FaPlus /> 投稿する
               </button>
             </Link>
@@ -176,14 +189,20 @@ const Header = () => {
         </div>
       </div>
 
+      {/* モバイル用の検索バー */}
       {isSearchOpen && (
-        <div className="w-full px-4 py-2 bg-gray-100 border-b border-gray-300 lg:hidden">
+        <form
+          onSubmit={handleSearch}
+          className="w-full px-4 py-2 bg-gray-100 border-b border-gray-300 lg:hidden"
+        >
           <input
             type="text"
             placeholder="記事、質問を検索..."
             className="w-full p-2 border border-gray-300 rounded outline-none"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-        </div>
+        </form>
       )}
 
       <nav className="flex justify-around bg-gray-800 text-white py-2">

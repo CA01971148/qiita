@@ -63,19 +63,67 @@
 
 // export default SearchPage;
 
-import { useRouter } from "next/router";
+"use client";
+
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
 
 const SearchPage = () => {
-  const router = useRouter();
-  const { query } = router.query; // URL パラメータを取得
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query"); // クエリパラメータ "query" を取得
+  const [searchResults, setSearchResults] = useState<string[]>([]); // ダミーの検索結果を保存
+
+  useEffect(() => {
+    if (query) {
+      // 実際の検索処理（APIリクエストなど）をここに実装
+      fetchSearchResults(query);
+    }
+  }, [query]);
+
+  const fetchSearchResults = (searchQuery: string) => {
+    // ここでは仮のデータを使った検索処理を実装
+    const dummyData = [
+      "記事1: Next.js 入門",
+      "記事2: React パフォーマンス最適化",
+      "記事3: TypeScript の基本",
+      "記事4: JavaScript の最新機能",
+    ];
+
+    // ダミー検索処理: クエリに一致するデータをフィルタリング
+    const results = dummyData.filter((item) =>
+      item.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    setSearchResults(results);
+  };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">検索結果</h1>
-      <p>
-        検索クエリ: <span className="font-mono text-blue-500">{query}</span>
-      </p>
-      {/* 実際の検索結果を表示する場合は API 呼び出しなどを実装 */}
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <div className="p-4 flex-grow">
+        <h1 className="text-2xl font-bold mb-4">検索結果</h1>
+
+        {/* 検索クエリを表示 */}
+        {query && (
+          <p className="mb-4">
+            <span className="font-semibold">検索ワード:</span> {query}
+          </p>
+        )}
+
+        {/* 検索結果を表示 */}
+        {searchResults.length > 0 ? (
+          <ul className="list-disc ml-5">
+            {searchResults.map((result, index) => (
+              <li key={index}>{result}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>検索結果が見つかりませんでした。</p>
+        )}
+      </div>
+      <Footer />
     </div>
   );
 };
