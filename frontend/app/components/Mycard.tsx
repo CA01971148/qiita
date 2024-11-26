@@ -1,56 +1,74 @@
-
 type Mycardtype = {
-  id: number;
-  title: string;
-  description: string;
-  tags: string[];
-  score: number;
-  date: string;
-  categoryId: number;
-  user:string;
-}
-
-const Mycard = () => {
-    const data:Mycardtype = {
-        id: 2,
-        title: "題名",
-        description: "詳細",
-        tags: ["HTML","CSS"],
-        score: 3,
-        date: "2024/11/26 10:41",
-        categoryId: 2,
-        user:"ユーザー"
-    }
+    id: number;
+    title: string;
+    description: string;
+    tags: string[];
+    score: number;
+    date: string;
+    categoryId: number;
+    user: string;
+  };
+  
+  type Card = [
+    number, // ID
+    string, // タイトル
+    string, // 詳細
+    string, // タグ（JSON文字列）
+    number, // コメント数
+    string, // 投稿日時
+    number, // いいね数
+    string  // ユーザーID
+  ][];
+  
+  const Mycard = (props: { data: Card; name: string }) => {
+    console.log(props.data)
     return (
-        <>
-            <hr className="mt-8"/>
-            <div className="ml-4 text-4xl">MyProject</div>
-            <div className=" mt-8  ml-auto md:ml-12">
-                <div className="overflow-x-auto flex space-x-4">
-                    <div className="w-full sm:max-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
-                        <div className="flex items-center mb-4">
-                            <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                            {/* 丸いアイコン */}
-                            <p className="text-gray-600 font-bold ml-2">@{data['user']}</p>
-                            {/* ユーザーID */}
-                        </div>
-                        <div className="flex justify-between text-gray-500 text-sm mb-4">
-                            <p>{data['date']}</p> {/* 記事の日付 */}
-                        </div>
-                        <h2 className="text-xl font-semibold mb-2 hover:underline">
-                            {data["title"]}
-                        </h2>
-                        <div className="flex flex-wrap space-x-2 mb-4">
-                            {data["tags"].map((tag,index) =>(
-                                <span key={index} className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 mt-1 rounded-full">{tag}</span>
-                            ))}
-                        </div>
-                    </div>
+      <>
+        <hr className="mt-8" />
+        <div className="ml-4 text-5xl mt-8">MyProject</div>
+        <div className="mt-8 ml-auto md:ml-12">
+          <div className="flex flex-wrap">
+            {props.data.map((card, index) => {
+              // CardのデータをMycardtypeにマッピング
+              const data: Mycardtype = {
+                id: card[0],
+                title: card[1],
+                description: card[2],
+                tags: JSON.parse(card[3]), // タグはJSON文字列なので、パースして配列にする
+                score: card[4],
+                date: card[5],
+                categoryId: card[6],
+                user: card[7],
+              };
+              if(props.name == data.user){
+                return (
+                <div key={index} className="w-full sm:max-w-[600px] sm:min-h-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 ml-5 mb-5">
+                  <div className="mb-4">
+                    <div className="w-16 h-16 bg-gray-300 rounded-full mt-3"></div>
+                    {/* 丸いアイコン */}
+                    <p className="text-gray-600 font-bold ml-2 ">@{data.user}</p>
+                    {/* ユーザーID */}
+                  </div>
+                  <div className="flex justify-between text-gray-500 text-md mb-4">
+                    <p>{data.date}</p> {/* 記事の日付 */}
+                  </div>
+                  <h2 className="text-4xl font-semibold mb-2 hover:underline">
+                    {data.title}
+                  </h2>
+                  <div className="flex flex-wrap space-x-2 mb-4">
+                    {data.tags.map((tag, index) => (
+                      <span key={index} className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 mt-1 rounded-full">{tag}</span>
+                    ))}
+                  </div>
                 </div>
-            </div>
-                
-        </>
+              );
+              }
+            })}
+          </div>
+        </div>
+      </>
     );
-}
-
-export default Mycard;
+  };
+  
+  export default Mycard;
+  
