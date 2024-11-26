@@ -184,7 +184,7 @@ const HomePage = () => {
                   {/* タグ表示 */}
                   <div className="flex flex-wrap space-x-2 mb-4">
                   {card.tags.map((tag,index) =>(
-                        <span key={index} className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
+                        <span key={index} className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 mt-1 rounded-full">
                         {tag}
                       </span>
                       ))}

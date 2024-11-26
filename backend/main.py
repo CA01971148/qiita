@@ -9,7 +9,7 @@ from functools import lru_cache
 
 app = Flask(__name__)
 SECRET_KEY = "sadjfljsiejfoj"
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 
 # MySQL接続情報を設定
 app.config['MYSQL_HOST'] = 'localhost'
