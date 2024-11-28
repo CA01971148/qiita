@@ -318,5 +318,24 @@ def rank():
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+
+@app.route('/Getcard',methods=['GET'])
+def get():
+    card_id = request.args.get('id')
+    try:
+        cur = mysql.connection.cursor()
+        query = """
+                    SELECT * 
+                    FROM card 
+                    WHERE cardid = %s;
+                """
+        cur.execute(query,(card_id,))
+        result = cur.fetchone()
+        cur.close()
+        
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+    
 if __name__ == "__main__":
     app.run(debug=True)
