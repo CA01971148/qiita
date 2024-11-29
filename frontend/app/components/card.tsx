@@ -2,8 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { handleClick } from "../utils/handleclick";
-export default function Card(props:any) {
-  const { card_id, title, description, tags, score, date ,user} = props; // プロパティを受け取る
+
+type card ={
+  id: number,
+  title: string,
+  description: string,
+  tags: string[],  
+  score: number,
+  date: string,
+  categoryId: number,
+  user: string
+}
+
+
+export default function Card(props:card) {
+  const { title,tags, score, date ,user} = props; // プロパティを受け取る
   const [liked, setLiked] = useState(false);
  
   return (
@@ -20,7 +33,7 @@ export default function Card(props:any) {
 
           <div className="px-6 pb-2 mb-2 mt-5 text-4xl text-center text-gray-900 font-bold">{title}</div>
           <div className="px-11 pt-4  ">
-                {tags.map((tag:any, index:any) => (
+                {tags.map((tag, index) => (
                   <span key={index} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 border border-gray-400">{tag}</span>
                 ))}
                 <p className="">

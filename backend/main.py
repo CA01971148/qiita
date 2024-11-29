@@ -163,6 +163,7 @@ def card_add():
     name = data.get('name')
     detail = data.get('detail')
     tag = json.dumps(data.get('tag'))
+    print(tag)
     userid = data.get('userid')
     cur.execute('INSERT INTO card(name,detail,tag,userid) VALUES (%s,%s,%s,%s)',(name,detail,tag,userid))
     mysql.connection.commit()
@@ -336,6 +337,26 @@ def get():
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
-    
+
+@app.route('/Fixcard',methods=['PUT'])
+def putCard():
+    data = request.json
+    cur = mysql.connection.cursor()
+    try:
+        name = data.get('name')
+        detail = data.get('detail')
+        tag = json.dumps(data.get('tag'))
+        cardid = data.get('cardid')
+        query = """
+                UPDATE card
+                SET name = %s, detail = %s, tag = %s
+                WHERE cardid = %s
+                """
+        cur.execute(query,(name,detail,tag,cardid,))
+        mysql.connection.commit()
+        if cur.rowcount == 1:
+            return jsonify({'succeess':True,'name':name}),200
+    except Exception as e:
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
 if __name__ == "__main__":
     app.run(debug=True)

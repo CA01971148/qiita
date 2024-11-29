@@ -12,18 +12,19 @@ type Mycardtype = {
     user: string;
   };
   
-  type Card = [
-    number, // ID
-    string, // タイトル
-    string, // 詳細
-    string, // タグ（JSON文字列）
-    number, // コメント数
-    string, // 投稿日時
-    number, // いいね数
-    string  // ユーザーID
-  ][];
+  type Card = {
+    id: number;
+    title: string;
+    description: string;
+    tags: string[];
+    score: number;
+    date: string;
+    categoryId: number;
+    user:string;
+  }[];
   
   const Mycard = (props: { data: Card; name: string }) => {
+    
     console.log(props.data)
     return (
       <>
@@ -31,23 +32,24 @@ type Mycardtype = {
         <div className="ml-4 text-5xl mt-8">MyProject</div>
         <div className="mt-8 ml-auto md:ml-12">
           <div className="flex flex-wrap">
+            
             {props.data.map((card, index) => {
               // CardのデータをMycardtypeにマッピング
               const data: Mycardtype = {
-                id: card[0],
-                title: card[1],
-                description: card[2],
-                tags: JSON.parse(card[3]), // タグはJSON文字列なので、パースして配列にする
-                score: card[4],
-                date: card[5],
-                categoryId: card[6],
-                user: card[7],
+                id: card.id, 
+                title: card.title,
+                description: card.description, 
+                tags:card.tags, 
+                score: card.score, 
+                date: card.date, 
+                categoryId: card.categoryId, 
+                user: card.user, 
               };
               if(props.name == data.user){
                 return (
                   
                       <div key={index} className="w-full sm:max-w-[600px] sm:min-h-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 ml-5 mb-5">
-                        <Link href={`/mypage/fix?categoryId=${data.categoryId}`}>
+                        <Link href={`/mypage/fix?categoryId=${data.id}`}>
                           <div className="mb-4">
                             <div className="w-16 h-16 bg-gray-300 rounded-full mt-3"></div>
                             {/* 丸いアイコン */}
@@ -67,7 +69,7 @@ type Mycardtype = {
                           </div>
                         </Link>
                       </div>
-              );
+                );
               }
             })}
           </div>

@@ -100,7 +100,7 @@ function Page() {
     }
   },[cards?.description])
 
-  const handleNewCommentChange = (e: any) => {
+  const handleNewCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
   };
 

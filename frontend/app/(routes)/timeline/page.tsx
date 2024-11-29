@@ -32,7 +32,7 @@ export default function Timeline() {
         const data = await res.json();
 
         // データを整形
-        const formattedData = data.map((item: any) => ({
+        const formattedData:CardData[] = data.map((item: string[]) => ({
           id: item[0],
           title: item[1],
           description: item[2],
@@ -61,7 +61,7 @@ export default function Timeline() {
           </div>
   );
   if (error) return <div>エラー: {error}</div>;
-
+  console.log(cards)
   return (
     <>
       <Header />

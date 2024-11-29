@@ -95,7 +95,7 @@ const FixPage = () => {
           </Link>
 
           <div className='flex items-center gap-2'>
-            <Link href="/">
+            <Link href="/mypage">
               <button className='bg-red-300 hover:bg-red-600 text-white px-2 py-1 rounded flex items-center mr-8'>
                 戻る
               </button>
