@@ -78,6 +78,31 @@ const FixPage = () => {
     }
   }, [data]);
 
+  const FixCard = async () => {
+    const postData = {
+      name: title,
+      detail: content,
+      tag: tags.split(" "),
+      cardid: data.id
+    };
+    try{
+      const res = await fetch('http://localhost:5000/Fixcard',{
+        method:'PUT',
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(postData)
+      });
+      const result = await res.json();
+      if(res.ok){
+        alert('修正完了')
+      }
+    } catch(error) {
+      alert("エラーが発生しました")
+    }
+
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // ここで送信のロジックを実装
@@ -100,7 +125,7 @@ const FixPage = () => {
                 戻る
               </button>
             </Link>
-            <button className='bg-green-500 hover:bg-green-700 text-white px-3 py-2 rounded flex items-center mr-8' onClick={handleSubmit}>
+            <button className='bg-green-500 hover:bg-green-700 text-white px-3 py-2 rounded flex items-center mr-8' onClick={FixCard}>
               修正 !!
             </button>
           </div>

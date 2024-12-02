@@ -4,9 +4,9 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation"; 
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
-import Link from "next/link";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
+import UseFetchName from '../../_components/hooks/UseFetchName'
 
 type CardData = {
   id: number;
@@ -38,22 +38,23 @@ function Page() {
       timestamp: "2024/10/28",
     },
   ]);
+  const [checkHeart, setCheckHeart] = useState<boolean>(true);
+  const {id} = UseFetchName();
   const [newComment, setNewComment] = useState("");
-
   const [previewContent, setPreviewContent] = useState('');
 
   // クエリパラメータからidを取得
-  const id = searchParams.get("id");
+  const cardid = searchParams.get("id");
 
   
   useEffect(() => {
-    if (!id) {
+    if (!cardid) {
       setError("IDが指定されていません");
       setLoading(false);
       return;
     }
     
-    const path: string = `http://localhost:5000/card/detail?id=${id}`;
+    const path: string = `http://localhost:5000/card/detail?id=${cardid}`;
     const fetchData = async () => {
       try {
         const res = await fetch(path, {
@@ -130,17 +131,22 @@ function Page() {
   return (
     <div className="min-h-screen">
       <Header />
-
-      <div className="flex flex-col items-center relative">
+      <div className="flex flex-row">
+        <div className={`text-6xl md:text-6xl md:transform md:translate-x-24 md:translate-y-14 ${checkHeart ? 'text-red-500 hover:text-red-800' : 'text-gray-500 hover:text-gray-300'} h-14 w-14`}>❤</div>
+        <div className="text-4xl mt-2 md:transform md:translate-x-24 md:translate-y-16 md:text-3xl">{cards?.score}</div>
+      </div>
+      <div>{id}:{cardid}</div>
+      <div className="flex flex-col items-center mt-[-30px] md:mt-[-70px]">
         {/* 記事カード */}
         <div className="max-w-4xl w-full items-center bg-white shadow-md rounded-lg overflow-hidden mt-8 border border-black/10 p-6">
           <div className="flex items-center mb-4">
             {/* 丸いアイコン */}
             <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
             {/* ID */}
+            <div></div>
             <p className="text-gray-600 font-bold ml-2">@{cards?.user}</p>
           </div>
-
+          
           <h2 className="text-4xl md:text-6xl font-semibold  mb-2">{cards?.title}</h2>
 
           {/* タグ */}
@@ -155,7 +161,7 @@ function Page() {
           <div className="flex justify-between text-gray-500 text-sm mb-4">
             <p>投稿日: {cards?.date}</p>
           </div>
-
+          
           <div
               className='prose'
               dangerouslySetInnerHTML={{

@@ -4,16 +4,8 @@ import { useState, useEffect} from "react";
 import React from "react";
 import UseFetchName from '../_components/hooks/UseFetchName'
 import Mycard from './Mycard'
-type Card = [
-  number,  // ID
-  string,  // タイトル
-  string,  // 詳細
-  string,  // タグ（JSON文字列）
-  number,  // コメント数
-  string,  // 投稿日時
-  number,  // いいね数
-  string   // ユーザーID
-][];
+import Image from "next/image"
+
 type CardData = {
   id: number;
   title: string;
@@ -108,7 +100,15 @@ function Mypage() {
       <div className="max-w-sm mx-auto bg-white shadow-md rounded-lg overflow-hidden mt-8 border border-black/10">
         <div className="p-4 text-center">
           {/* 丸いアイコン（ユーザーアイコン） */}
-          <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4"></div>
+          <div className="w-24 h-24 bg-gray-100 rounded-full mx-auto mb-4 shadow-lg flex items-center justify-center overflow-hidden  animate-spin-slow border border-slate-300">
+            <Image
+              src="/jugo2.jpg"
+              width={500}
+              height={500}
+              alt="pc_img"
+              className="object-cover rounded-full"
+            />
+          </div>
 
           {/* ID - 太字に変更 */}
           <p className="text-gray-600 font-bold">@{name}</p>

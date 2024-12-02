@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Image from "next/image"
 
 type Mycardtype = {
     id: number;
@@ -51,7 +52,9 @@ type Mycardtype = {
                       <div key={index} className="w-full sm:max-w-[600px] sm:min-h-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 ml-5 mb-5">
                         <Link href={`/mypage/fix?categoryId=${data.id}`}>
                           <div className="mb-4">
-                            <div className="w-16 h-16 bg-gray-300 rounded-full mt-3"></div>
+                          <div className="w-20 h-20 bg-gray-100 rounded-full mb-4 shadow-lg flex items-center justify-center overflow-hidden  animate-spin-slow border border-slate-300">
+                            <Image src="/shati.jpg" width={500} height={500} alt="pc_img" className="object-cover rounded-full"/>
+                          </div>
                             {/* 丸いアイコン */}
                             <p className="text-gray-600 font-bold ml-2">@{data.user}</p>
                             {/* ユーザーID */}
