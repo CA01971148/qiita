@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { handleClick } from "../utils/handleclick";
-import UseFetchName from "../_components/hooks/UseFetchName";
+// import UseFetchName from "../_components/hooks/UseFetchName";
 import Link from "next/link";
+import Image from "next/image"
 
-type CardData = {
-  card_id: number;
+interface CardData {
+  id: number;
   title: string;
-  description: string;
+  detail: string;
   tags: string[];
   score: number;
   date: string;
@@ -19,24 +20,29 @@ type CardData = {
 export default function Card(props: CardData) {
   const [liked, setLiked] = useState(false);
 
-  const { name, id } = UseFetchName();
+  // const { name, id } = UseFetchName();
 
   return (
     <div>
       {/* 画像部分 */}
-      <div className="inline-block align-top p-2 pb-0  flex ">
-        <img
-          className="w-8 h-8 bg-gray-300/50 rounded-full"
-          src="共食いタコ.png"
-          alt="Avatar"
-        />
-        <div>
-          <div className="ml-4 text-gray-400">{props.user}</div>
-          <p className="ml-4 text-gray-600 text-xs ">{props.date}</p>
+      <div className="inline-block align-top p-2 pb-0">
+        <div className="flex flex-row">
+          <Image
+              src="/共食いタコ.png"
+              width={40}
+              height={40}
+              alt="pc_img"
+              className="object-cover rounded-full bg-gray-300/50"
+            />
+          <div>
+            <div className="ml-4 text-gray-400 mt-2 ">{props.user}</div>
+            
+          </div>
         </div>
+        <p className="ml-4 text-gray-600 text-xs ">{props.date}</p>
       </div>
-      <Link key={props.card_id} href={`/card`}>
-        <div className=" ml-16 text-lg text-left text-gray-900 font-bold hover:text-sky-700 ">
+      <Link key={props.id} href={`/card`}>
+        <div className=" ml-16 text-4xl text-left text-gray-900 font-bold hover:text-sky-700 mt-3">
           {props.title}
         </div>
       </Link>
@@ -45,7 +51,7 @@ export default function Card(props: CardData) {
         {props.tags.map((tag: string, index: number) => (
           <span
             key={index}
-            className=" inline-block bg-blue-200 text-blue-700 rounded-full px-1  text-xs   mr-2   border-gray-400"
+            className=" inline-block bg-blue-200 text-blue-700 rounded-full px-1  text-base   mr-2 mt-2  border-gray-400"
           >
             {tag}
           </span>
@@ -54,7 +60,7 @@ export default function Card(props: CardData) {
 
       <button onClick={() => handleClick(liked, setLiked)} className="ml-14">
         <span
-          className={` i-heroicons-solid-heart w-4 h-4  text-red-500 `}
+          className={` i-heroicons-solid-heart w-4 h-4  text-red-500 mt-2`}
         ></span>
         {props.score}
       </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { usePathname, useSearchParams, useRouter } from "next/navigation"; // 追加
+import { usePathname, useRouter } from "next/navigation"; // 追加
 import Link from "next/link";
 import { MdOutlineSearch } from "react-icons/md";
 import { FaBell, FaPlus, FaUser } from "react-icons/fa";

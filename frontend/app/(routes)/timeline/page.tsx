@@ -10,7 +10,7 @@ interface CardData {
   title: string;
   detail: string;
   tags: string[];
-  hearts: number;
+  score: number;
   date: string;
   categoryId: number;
   user: string;
@@ -18,7 +18,7 @@ interface CardData {
 
 export default function Timeline() {
   const [cards, setCards] = useState<CardData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   // http://localhost:3001/postsからデータを取得
@@ -33,7 +33,7 @@ export default function Timeline() {
 
         setCards(data);
       } catch {
-        0;
+        setError('データベースからデータが取得できません')
         console.error("データ取得中にエラーが発生した", error);
       }
     };
@@ -93,7 +93,7 @@ export default function Timeline() {
         <div className="w-full sm:w-1/2 p-4 border-b sm:border-r sm:border-b-0 border-gray-300 order-1 sm:order-none">
           <div className="mt-2">
             <div className="flex flex-col space-y-4">
-              {cards.map((card, index) => (
+              {cards.map((card) => (
                 <div
                   key={card.id}
                   className="w-full rounded-md border shadow-md bg-white h-50"

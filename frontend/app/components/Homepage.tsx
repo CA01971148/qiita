@@ -4,10 +4,10 @@ import Card from "./card";
 import { LeftSidebar } from "@/app/components/LeftSidebar";
 import { RightSidebar } from "@/app/components/RightSidebar";
 
-type CardData = {
+interface CardData {
   id: number;
   title: string;
-  description: string;
+  detail: string;
   tags: string[];
   score: number;
   date: string;
@@ -17,7 +17,7 @@ type CardData = {
 
 const HomePage = () => {
   const [cards, setCards] = useState<CardData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   // http://localhost:3001/postsからデータを取得
@@ -31,8 +31,8 @@ const HomePage = () => {
         const data = await response.json();
 
         setCards(data);
-      } catch {
-        0;
+      } catch{
+        setError('データベースからデータが取得できません')
         console.error("データ取得中にエラーが発生した", error);
       }
     };
@@ -50,10 +50,11 @@ const HomePage = () => {
           <div className="flex space-x-4">
             {cards.map((card) => (
               <div key={card.id} className="w-full  ">
-                <div
+                {/* <div
                   className=" sm:w-96   md:w-96 my-2 md:mx-auto
       mx-2 rounded-md border shadow-md bg-white"
-                >
+                > */}
+                 <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
                   <Card {...card} />
                 </div>
               </div>
@@ -65,7 +66,7 @@ const HomePage = () => {
         <div className="mt-2">
           {/* 親コンテナにflex-colを追加 */}
           <div className="flex flex-col space-y-4">
-            {cards.map((card, index) => (
+            {cards.map((card) => (
               <div
                 key={card.id}
                 className="w-full rounded-md border shadow-md bg-white h-50"
