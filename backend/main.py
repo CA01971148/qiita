@@ -358,5 +358,102 @@ def putCard():
             return jsonify({'succeess':True,'name':name}),200
     except Exception as e:
         return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+    
+@app.route('/like',methods=['GET'])
+def like():
+    cur = mysql.connection.cursor()
+    try:
+        userid = request.args.get("userid")
+        cardid = request.args.get("cardid")
+        query = """
+                SELECT * 
+                FROM likes
+                where userid = %s and cardid = %s
+                """
+        cur.execute(query,(userid,cardid,))
+        if cur.rowcount == 1:
+            return jsonify({'success':False,})
+        else:
+            return jsonify({'success':True,})
+    except Exception as e:
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+
+@app.route('/like', methods=["POST"])
+def likeadd():
+    cur = mysql.connection.cursor()
+    data = request.json
+    try:
+        userid = data.get("userid")
+        cardid = data.get("cardid")
+
+        # likesテーブルにすでに存在するかを確認
+        check_query = "SELECT COUNT(*) FROM likes WHERE userid = %s AND cardid = %s"
+        cur.execute(check_query, (userid, cardid))
+        like_exists = cur.fetchone()[0]
+
+        if like_exists:
+            return jsonify({"error": "既にいいねされています"}), 400
+
+        # トランザクション開始
+        mysql.connection.begin()
+
+        # likesテーブルに新しいレコードを挿入
+        insert_query = """
+            INSERT INTO likes (userid, cardid)
+            VALUES (%s, %s)
+        """
+        cur.execute(insert_query, (userid, cardid))
+
+        # cardテーブルのheartカウントをインクリメント
+        update_query = """
+            UPDATE card
+            SET heart = heart + 1
+            WHERE cardid = %s
+        """
+        cur.execute(update_query, (cardid,))
+
+        # トランザクションコミット
+        mysql.connection.commit()
+
+        return jsonify({"success": True, "message": "いいねが追加されました"}), 200
+    except Exception as e:
+        # トランザクションロールバック
+        mysql.connection.rollback()
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+    finally:
+        cur.close()
+
+@app.route("/like", methods=["DELETE"])
+def likedel():
+    cardid = request.args.get("cardid")
+    userid = request.args.get("userid")
+    try:
+        cur = mysql.connection.cursor()
+        
+        # likesテーブルから指定されたuseridとcardidのレコードを削除
+        delete_query = """
+                DELETE FROM likes
+                WHERE userid = %s AND cardid = %s
+        """
+        cur.execute(delete_query, (userid, cardid))
+        
+        # cardテーブルのheartを1減らす
+        update_query = """
+                UPDATE card
+                SET heart = heart - 1
+                WHERE cardid = %s
+        """
+        cur.execute(update_query, (cardid,))
+        
+        # トランザクションをコミット
+        mysql.connection.commit()
+        
+        return jsonify({"success": True, "message": "いいねが削除されました"}), 200
+
+    except Exception as e:
+        # エラーが発生した場合、トランザクションをロールバック
+        mysql.connection.rollback()
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(debug=True)

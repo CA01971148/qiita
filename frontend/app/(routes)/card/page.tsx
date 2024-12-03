@@ -19,6 +19,10 @@ type CardData = {
   user: string;
 };
 
+type LikeGet = {
+  success:boolean;
+}
+
 function Page() {
   const searchParams = useSearchParams(); // URLパラメータを取得
   const [cards, setCards] = useState<CardData>();
@@ -38,7 +42,7 @@ function Page() {
       timestamp: "2024/10/28",
     },
   ]);
-  const [checkHeart, setCheckHeart] = useState<boolean>(true);
+  const [checkHeart, setCheckHeart] = useState<boolean>(false);
   const {id} = UseFetchName();
   const [newComment, setNewComment] = useState("");
   const [previewContent, setPreviewContent] = useState('');
@@ -46,7 +50,7 @@ function Page() {
   // クエリパラメータからidを取得
   const cardid = searchParams.get("id");
 
-  
+  //
   useEffect(() => {
     if (!cardid) {
       setError("IDが指定されていません");
@@ -91,6 +95,28 @@ function Page() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (id && cardid) {
+      const likeget = async () => {
+        try {
+          const res = await fetch(`http://localhost:5000/like?userid=${id}&cardid=${cardid}`, {
+            method: "GET",
+          });
+          if (!res.ok) {
+            throw new Error("ネットワークの応答が正常ではありません");
+          }
+          const data: LikeGet = await res.json();
+          setCheckHeart(data.success);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+  
+      likeget();
+    }
+  }, [id, cardid]); // 両方が変更されたら実行
+  
+
   // markdown処理
   useEffect(() =>{
     if(cards?.description)
@@ -119,6 +145,30 @@ function Page() {
       setNewComment("");
     }
   };
+  //ハートのクリックイベント
+  const heartClick = () =>{
+    if(checkHeart){
+      const res = fetch(`http://localhost:5000/like`,{
+        method:"POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"userid":id,"cardid":cardid})
+      });
+      setCheckHeart(false)
+    }else{
+      const res = fetch(`http://localhost:5000/like?userid=${id}&cardid=${cardid}`,{
+        method:"DELETE",
+      });
+      if (!res) {
+        throw new Error("ネットワークの応答が正常ではありません");
+      }else{
+        setCheckHeart(true)
+        router.push(router.asPath, undefined, { scroll: false });
+      }
+
+    }
+  }
 
   if (loading)
     return (
@@ -132,7 +182,7 @@ function Page() {
     <div className="min-h-screen">
       <Header />
       <div className="flex flex-row">
-        <div className={`text-6xl md:text-6xl md:transform md:translate-x-24 md:translate-y-14 ${checkHeart ? 'text-red-500 hover:text-red-800' : 'text-gray-500 hover:text-gray-300'} h-14 w-14`}>❤</div>
+        <div onClick={heartClick} className={`text-6xl md:text-6xl md:transform md:translate-x-24 md:translate-y-14 ${checkHeart ? 'text-red-500 hover:text-red-800' : 'text-gray-500 hover:text-gray-300'} h-14 w-14`}>❤</div>
         <div className="text-4xl mt-2 md:transform md:translate-x-24 md:translate-y-16 md:text-3xl">{cards?.score}</div>
       </div>
       <div>{id}:{cardid}</div>
