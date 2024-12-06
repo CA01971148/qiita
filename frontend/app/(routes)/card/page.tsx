@@ -50,7 +50,6 @@ function Page() {
   // クエリパラメータからidを取得
   const cardid = searchParams.get("id");
 
-  //
   useEffect(() => {
     if (!cardid) {
       setError("IDが指定されていません");
@@ -93,7 +92,7 @@ function Page() {
     };
 
     fetchData();
-  }, []);
+  }, [checkHeart]);
 
   useEffect(() => {
     if (id && cardid) {
@@ -145,30 +144,39 @@ function Page() {
       setNewComment("");
     }
   };
+  
   //ハートのクリックイベント
-  const heartClick = () =>{
-    if(checkHeart){
-      const res = fetch(`http://localhost:5000/like`,{
-        method:"POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"userid":id,"cardid":cardid})
-      });
-      setCheckHeart(false)
-    }else{
-      const res = fetch(`http://localhost:5000/like?userid=${id}&cardid=${cardid}`,{
-        method:"DELETE",
-      });
-      if (!res) {
-        throw new Error("ネットワークの応答が正常ではありません");
-      }else{
-        setCheckHeart(true)
-        router.push(router.asPath, undefined, { scroll: false });
+  const heartClick = async () => {
+    try {
+      // いいねの状態に応じてAPIリクエストを送信
+      if (checkHeart) {
+        await fetch(`http://localhost:5000/like?userid=${id}&cardid=${cardid}`, {
+          method: "DELETE",
+        });
+        setCheckHeart(false);  // いいねを取り消した状態に変更
+      } else {
+        await fetch(`http://localhost:5000/like`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userid: id, cardid: cardid }),
+        });
+        setCheckHeart(true);  // いいねを付けた状態に変更
       }
-
+  
+      // いいねを変更した後、スコアを再取得
+      const updatedCard = await fetch(`http://localhost:5000/card/detail?id=${cardid}`)
+        .then(res => res.json());
+      const updatedScore = updatedCard[4];  // 例えばスコアがデータの4番目の要素の場合
+      setCards(prevCards => ({
+        ...prevCards!,
+        score: updatedScore,
+      }));
+    } catch (err) {
+      console.error('いいねの更新に失敗しました', err);
     }
-  }
+  };
 
   if (loading)
     return (
@@ -185,7 +193,6 @@ function Page() {
         <div onClick={heartClick} className={`text-6xl md:text-6xl md:transform md:translate-x-24 md:translate-y-14 ${checkHeart ? 'text-red-500 hover:text-red-800' : 'text-gray-500 hover:text-gray-300'} h-14 w-14`}>❤</div>
         <div className="text-4xl mt-2 md:transform md:translate-x-24 md:translate-y-16 md:text-3xl">{cards?.score}</div>
       </div>
-      <div>{id}:{cardid}</div>
       <div className="flex flex-col items-center mt-[-30px] md:mt-[-70px]">
         {/* 記事カード */}
         <div className="max-w-4xl w-full items-center bg-white shadow-md rounded-lg overflow-hidden mt-8 border border-black/10 p-6">
