@@ -92,7 +92,7 @@ function Page() {
     };
 
     fetchData();
-  }, [checkHeart]);
+  }, []);
 
   useEffect(() => {
     if (id && cardid) {
@@ -150,11 +150,6 @@ function Page() {
     try {
       // いいねの状態に応じてAPIリクエストを送信
       if (checkHeart) {
-        await fetch(`http://localhost:5000/like?userid=${id}&cardid=${cardid}`, {
-          method: "DELETE",
-        });
-        setCheckHeart(false);  // いいねを取り消した状態に変更
-      } else {
         await fetch(`http://localhost:5000/like`, {
           method: "POST",
           headers: {
@@ -162,7 +157,13 @@ function Page() {
           },
           body: JSON.stringify({ userid: id, cardid: cardid }),
         });
-        setCheckHeart(true);  // いいねを付けた状態に変更
+        setCheckHeart(false);  // いいねを付けた状態に変更
+      } else {
+        await fetch(`http://localhost:5000/like?userid=${id}&cardid=${cardid}`, {
+          method: "DELETE"
+        });
+        setCheckHeart(true);  // いいねを取り消した状態に変更
+        
       }
   
       // いいねを変更した後、スコアを再取得
