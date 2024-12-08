@@ -11,7 +11,8 @@ function Post() {
   const [tags, setTags] = useState('');
   const [content, setContent] = useState('');
   const [previewContent, setPreviewContent] = useState('');
-  const { name, id } = UseFetchName();
+  const { id } = UseFetchName();
+  
   // Markdownを処理する
   useEffect(() => {
     if (content) {
