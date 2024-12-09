@@ -32,7 +32,7 @@ export default function Card(props: CardData) {
               width={40}
               height={40}
               alt="pc_img"
-              className="object-cover rounded-full bg-gray-300/50"
+              className="icon object-cover rounded-full bg-gray-300/50"
             />
           <div>
             <div className="ml-4 text-gray-400 mt-2 ">{props.user}</div>
@@ -71,7 +71,7 @@ export default function Card(props: CardData) {
       {/* <div className="border border-gray-400 p-4 flex flex-col justify-between leading-normal bg-teal-100">
           <div className="mb-2">
             <div className="flex items-center">
-              <img className="w-10 h-10 rounded-full mr-4" src="共食いタコ.png" alt="Avatar"/>
+              <Image className="w-10 h-10 rounded-full mr-4" src="共食いタコ.png" alt="Avatar"/>
               <div className="text-sm">
                 <p className="text-gray-900 leading-none">ユーザー名</p> 
                 <p className="text-gray-600">{date}</p>
