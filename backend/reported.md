@@ -1,5 +1,36 @@
 ## Mysqlスキーマ定義
 ```
+
+CREATE TABLE `account` (
+    `userid` INT NOT NULL AUTO_INCREMENT,
+    `user` VARCHAR(255) NOT NULL,
+    `pas` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`userid`),
+    UNIQUE KEY `unique_user` (`user`)  
+);
+
+CREATE TABLE `card` (
+    `cardid` INT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `detail` TEXT,
+    `tag` JSON,
+    `heart` INT DEFAULT 0,
+    `time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `userid` INT,
+    PRIMARY KEY (`cardid`),
+    FOREIGN KEY (`userid`) REFERENCES `account`(`userid`)
+);
+
+CREATE TABLE `likes` (
+    `userid` INT NOT NULL,
+    `cardid` INT NOT NULL,
+    `time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`userid`, `cardid`),
+    FOREIGN KEY (`userid`) REFERENCES `account`(`userid`),
+    FOREIGN KEY (`cardid`) REFERENCES `card`(`cardid`)
+);
+
+
 CREATE TABLE account (
     userid INT AUTO_INCREMENT PRIMARY KEY,
     user VARCHAR(255) NOT NULL,

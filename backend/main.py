@@ -146,8 +146,8 @@ def account_add():
     cur = mysql.connection.cursor()
     data = request.json
     {'success':False}
-    user = data['data'][0]
-    pw = data['data'][1]
+    user = data.get("user")
+    pw = data.get("pw")
     cur.execute('INSERT INTO account(user,pas) VALUES(%s,%s)',(user,pw))
     mysql.connection.commit()
     if cur.rowcount == 1:
@@ -454,6 +454,25 @@ def likedel():
         # エラーが発生した場合、トランザクションをロールバック
         mysql.connection.rollback()
         return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+
+@app.route('/name_get',methods=['GET'])
+def name_get():
+    name = request.args.get("user")
+    try:
+        cur =mysql.connection.cursor()
+        query = """
+                    SELECT user
+                    FROM account
+                    where user = %s
+                """
+        cur.execute(query, (name,))
+        if cur.rowcount == 1:
+            return jsonify({"success":True}),200
+        else:
+            return jsonify({"success":False}),201
+    except:
+        return jsonify({"success":'エラーが発生しました'}),500
+
 
 if __name__ == "__main__":
     app.run(debug=True)
