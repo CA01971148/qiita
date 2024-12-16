@@ -118,6 +118,11 @@ const HomePage = () => {
   );
   if (error) return <div>エラー: {error}</div>;
 
+  const handleClick = (e:React.MouseEvent<SVGSVGElement, MouseEvent>) =>{
+    e.preventDefault();
+    alert('押されたよ')
+  }
+
   // 左サイドバーのコンテンツ
   const LeftSidebar = () => {
     return (
@@ -177,11 +182,14 @@ const HomePage = () => {
                   <div className="flex justify-between text-gray-500 text-sm mb-4">
                     <p>{card.date}</p> {/* 記事の日付 */}
                   </div>
-                    <h2 className="text-xl font-semibold mb-2 hover:underline">
+                  <div className="flex flex-row">
+                    <h2 className="text-xl mx-auto font-semibold mb-2 hover:underline">
                       {card.title}
                     </h2>
-                  {/* 記事タイトル */}
-                  {/* タグ表示 */}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={handleClick}>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                    </svg>
+                  </div>
                   <div className="flex flex-wrap space-x-2 mb-4">
                   {card.tags.map((tag,index) =>(
                         <span key={index} className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 mt-1 rounded-full">
@@ -209,9 +217,15 @@ const HomePage = () => {
                     <div className="flex justify-between text-gray-500 text-sm mb-4">
                       <p>{card.date}</p>
                     </div>
+                    <div className="flex flex-row">
                       <h2 className="text-xl font-semibold mb-2 hover:underline">
                         {card.title}
                       </h2>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-8 ml-auto mr-2" onClick={handleClick}>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                    </svg>
+                    </div>
+                      
                     <div className="flex flex-wrap space-x-2 mb-4">
                       {card.tags.map((data,index)=>(
                         <span key={index} className="bg-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
