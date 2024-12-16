@@ -197,6 +197,11 @@ const HomePage = () => {
                       </span>
                       ))}
                   </div>
+                  <div className="flex flex-row">
+                    <div className="h-1 mt-[-10px] text-2xl text-red-600">❤ </div>
+                    <div className="h-1 mt-[-10px] text-2xl ml-2">{card.score}</div>
+                  </div>
+                  
                 </div>
               </Link>
             ))}
@@ -232,6 +237,10 @@ const HomePage = () => {
                         {data}
                       </span>
                       ))}
+                    </div>
+                    <div className="flex flex-row">
+                      <div className="h-1 mt-[-10px] text-2xl text-red-600">❤ </div>
+                      <div className="h-1 mt-[-10px] text-2xl ml-2">{card.score}</div>
                     </div>
                   </div>
               </Link>
