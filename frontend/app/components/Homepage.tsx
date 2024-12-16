@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { FaReact, FaJs, FaGlobe, FaUser } from "react-icons/fa"; // アイコンをインポート
 import Link from "next/link"; 
+import UseFetchName from "../_components/hooks/UseFetchName";
 
 type CardData = {
   id: number;
@@ -14,11 +15,17 @@ type CardData = {
   user:string;
 };
 
-const HomePage = () => {
+type BookMarks = {
+  data: [number, number, string]; 
+  exit: boolean;
+}
 
+const HomePage = () => {
+  const { id } = UseFetchName();
   const [cards, setCards] = useState<CardData[]>([]);
   const [time,setTime] = useState<CardData[]>([]);
   const [rank,setRank] = useState<[]>([]);
+  const [book,setBook] = useState<BookMarks>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -110,6 +117,24 @@ const HomePage = () => {
     fetchData()
   },[])
 
+  useEffect(()=>{
+    const fetchData = async () =>{
+      try{
+        const res = await fetch(`http://localhost:5000/book_get?userid=${id}`,{
+          method:"GET",
+        });
+        if(!res.ok){
+          throw new Error('ネットワークの応答が正常ではありません')
+        }
+        const data = await res.json();
+        setBook(data)
+      }catch(err){
+        console.log("サーバーサイドでエラーが発生しています")
+      }
+    }
+    fetchData()
+  },[id])
+
   if (loading) 
     return (
           <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -161,7 +186,7 @@ const HomePage = () => {
       </div>
     );
   };
-
+  console.log(book)
   // メインコンテンツのコンポーネント
   const MainContent = () => {
     return (
@@ -186,9 +211,17 @@ const HomePage = () => {
                     <h2 className="text-xl mx-auto font-semibold mb-2 hover:underline">
                       {card.title}
                     </h2>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={handleClick}>
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                    </svg>
+                    {book?.data && book.data[1] == card.id && (
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={handleClick}>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                      </svg>
+                    )}
+
+                    {book?.data && book.data[1] != card.id && (
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={handleClick}>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                      </svg>
+                    )}
                   </div>
                   <div className="flex flex-wrap space-x-2 mb-4">
                   {card.tags.map((tag,index) =>(

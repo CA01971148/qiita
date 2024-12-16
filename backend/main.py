@@ -473,6 +473,26 @@ def name_get():
     except:
         return jsonify({"success":'エラーが発生しました'}),500
 
-
+@app.route('/book_get',methods=["GET"])
+def book_get():
+    name = request.args.get("userid")
+    card = request.args.get("cardid")
+    try:
+        cur = mysql.connection.cursor()
+        query = """
+                    SELECT *
+                    FROM bookmarks
+                    where userid = %s
+                """
+        cur.execute(query, (name,))
+        result = cur.fetchone()
+        cur.close()
+        
+        if cur.rowcount == 1:
+            return jsonify({"exit":True,"data":result}),200
+        else:
+            return jsonify({"exit":False}),201
+    except:
+        return jsonify({"success":'エラーが発生しました'}),500
 if __name__ == "__main__":
     app.run(debug=True)
