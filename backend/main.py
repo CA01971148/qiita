@@ -402,7 +402,7 @@ def likeadd():
             INSERT INTO likes (userid, cardid)
             VALUES (%s, %s)
         """
-        cur.execute(insert_query, (userid, cardid))
+        cur.execute(insert_query, (userid, cardid,))
 
         # cardテーブルのheartカウントをインクリメント
         update_query = """
@@ -476,7 +476,6 @@ def name_get():
 @app.route('/book_get',methods=["GET"])
 def book_get():
     name = request.args.get("userid")
-    card = request.args.get("cardid")
     try:
         cur = mysql.connection.cursor()
         query = """
@@ -485,14 +484,49 @@ def book_get():
                     where userid = %s
                 """
         cur.execute(query, (name,))
-        result = cur.fetchone()
+        result = cur.fetchall()
         cur.close()
         
-        if cur.rowcount == 1:
+        if cur.rowcount >= 1:
             return jsonify({"exit":True,"data":result}),200
         else:
             return jsonify({"exit":False}),201
     except:
         return jsonify({"success":'エラーが発生しました'}),500
+    
+@app.route('/book_post',methods=["POST"])
+def book_post():
+    data = request.json
+    try:
+        userid = data.get("userid")
+        cardid = data.get("cardid")
+        cur = mysql.connection.cursor()
+        query = """
+                    INSERT INTO bookmarks(userid,cardid)
+                    VALUES(%s,%s)
+                """
+        cur.execute(query, (userid,cardid,))
+        mysql.connection.commit()
+        return jsonify({"success":True,"message":"ブックマークに保存しました"})
+    except:
+        return jsonify({"success":False,"message":"ブックマークに保存できていません"})
+    finally:
+        cur.close()
+        
+@app.route("/book_del",methods=["DELETE"])
+def book_del():
+    cardid = request.args.get("cardid")
+    userid = request.args.get("userid")
+    try:
+        cur = mysql.connection.cursor()
+        query = """
+                    DELETE FROM bookmarks
+                    WHERE userid = %s and cardid = %s
+                """
+        cur.execute(query,(userid,cardid))
+        mysql.connection.commit()
+        return jsonify({"success": True, "message": "ブックマークが削除されました"}), 200
+    except Exception as e:
+        return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
 if __name__ == "__main__":
     app.run(debug=True)

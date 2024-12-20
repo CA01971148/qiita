@@ -16,7 +16,7 @@ type CardData = {
 };
 
 type BookMarks = {
-  data: [number, number, string]; 
+  data: [number, number, string][]; 
   exit: boolean;
 }
 
@@ -26,6 +26,7 @@ const HomePage = () => {
   const [time,setTime] = useState<CardData[]>([]);
   const [rank,setRank] = useState<[]>([]);
   const [book,setBook] = useState<BookMarks>();
+  const [bookCheck,setBookCheck] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -74,19 +75,18 @@ const HomePage = () => {
           throw new Error('ネットワークの応答が正常ではありません');
         }
         const data = await res.json();
-
-        // データを整形
-        const formattedData:CardData[] = data.map((item:string[]) => ({
+  
+        const formattedData: CardData[] = data.map((item: string[]) => ({
           id: item[0],
           title: item[1],
           description: item[2],
-          tags: JSON.parse(item[3]), 
+          tags: JSON.parse(item[3]),
           score: item[4],
           date: item[5],
           categoryId: item[6],
-          user:item[7]
+          user: item[7],
         }));
-
+  
         setTime(formattedData);
       } catch (err) {
         setError('err.message');
@@ -94,9 +94,9 @@ const HomePage = () => {
         setLoading(false);
       }
     };
-
+  
     fetchData();
-  }, []);
+  }, [bookCheck]);
 
   useEffect(() =>{
     const path:string = 'http://localhost:5000/user_ranking';
@@ -143,11 +143,70 @@ const HomePage = () => {
   );
   if (error) return <div>エラー: {error}</div>;
 
-  const handleClick = (e:React.MouseEvent<SVGSVGElement, MouseEvent>) =>{
+  const handleClick = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>, card: CardData) => {
     e.preventDefault();
-    alert('押されたよ')
-  }
+    await postData(card);
+    // 即座に状態を反映
+    setBook((prev) => {
+      const updatedData: [number, number, string][] = prev?.data 
+        ? [...prev.data, [0, card.id, ""]]
+        : [[0, card.id, ""]];
+      return prev ? { ...prev, data: updatedData } : { data: updatedData, exit: false };
+    });
+  };
+  
+  const bookClickDel = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>, card: CardData) => {
+    e.preventDefault();
+    await delData(card);
 
+    setBook((prev) => {
+      if (!prev) return prev;
+  
+      const updatedData = prev.data.filter(([_, cardId]) => cardId !== card.id);
+      return { ...prev, data: updatedData };
+    });
+  };
+  
+  
+  const delData = async (card: CardData) => {
+    try {
+      const res = await fetch(`http://localhost:5000/book_del?userid=${id}&cardid=${card.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!res.ok) {
+        throw new Error("投稿件数がうまく読み取れません");
+      }
+    } catch (error) {
+      console.error("エラーが発生", error);
+    }
+  };
+  
+  const postData = async (card: CardData) => {
+    try {
+      const res = await fetch("http://localhost:5000/book_post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userid: id,
+          cardid: card.id,
+        }),
+      });
+  
+      if (!res.ok) {
+        throw new Error("投稿件数がうまく読み取れません");
+      }
+    } catch (error) {
+      console.error("エラーが発生", error);
+    }
+  };
+  
+  
   // 左サイドバーのコンテンツ
   const LeftSidebar = () => {
     return (
@@ -177,8 +236,6 @@ const HomePage = () => {
           {rank.map((data,index)=>(
             <li key={index} className="flex items-center hover:underline">
             <FaUser className="mr-2 text-gray-500" /> {data[0]}
-            {/* <p className="text-2xl inline-block px-28 w-full text-right">{data[1]}</p> */}
-
           </li>
           ))}
           
@@ -186,7 +243,6 @@ const HomePage = () => {
       </div>
     );
   };
-  console.log(book)
   // メインコンテンツのコンポーネント
   const MainContent = () => {
     return (
@@ -211,17 +267,15 @@ const HomePage = () => {
                     <h2 className="text-xl mx-auto font-semibold mb-2 hover:underline">
                       {card.title}
                     </h2>
-                    {book?.data && book.data[1] == card.id && (
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={handleClick}>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                      </svg>
-                    )}
-
-                    {book?.data && book.data[1] != card.id && (
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={handleClick}>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                      </svg>
-                    )}
+                    {book?.data && book.data.some(([_, cardid]) => cardid === card.id) ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={(e) => bookClickDel(e, card)}>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={(e) => handleClick(e, card)}>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                    </svg>
+                  )}
                   </div>
                   <div className="flex flex-wrap space-x-2 mb-4">
                   {card.tags.map((tag,index) =>(
@@ -259,9 +313,15 @@ const HomePage = () => {
                       <h2 className="text-xl font-semibold mb-2 hover:underline">
                         {card.title}
                       </h2>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-8 ml-auto mr-2" onClick={handleClick}>
+                      {book?.data && book.data.some(([_, id]) => id === card.id) ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={(e) => bookClickDel(e, card)}>
                       <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                     </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7 ml-auto mr-2" onClick={(e) => handleClick(e, card)}>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                    </svg>
+                    )}
                     </div>
                       
                     <div className="flex flex-wrap space-x-2 mb-4">
