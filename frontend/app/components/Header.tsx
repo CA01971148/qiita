@@ -116,6 +116,9 @@ const Header = () => {
                       <Link href="/mypage">マイページ</Link>
                     </li>
                     <li className="hover:bg-gray-400">
+                      <Link href="/bookmarks">ブックマーク</Link>
+                    </li>
+                    <li className="hover:bg-gray-400">
                       <button onClick={Logout} className="text-left w-full">ログアウト</button>
                     </li>
                   </ul>

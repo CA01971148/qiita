@@ -493,7 +493,7 @@ def book_get():
             return jsonify({"exit":False}),201
     except:
         return jsonify({"success":'エラーが発生しました'}),500
-    
+        
 @app.route('/book_post',methods=["POST"])
 def book_post():
     data = request.json
@@ -528,5 +528,29 @@ def book_del():
         return jsonify({"success": True, "message": "ブックマークが削除されました"}), 200
     except Exception as e:
         return jsonify({"error": "サーバーエラーが発生しました", "details": str(e)}), 500
+    
+@app.route("/book_card",methods=["GET"])
+def book_book_card():
+    userid = request.args.get("userid")
+    try:
+        cur = mysql.connection.cursor()
+        query = """
+                    SELECT c.cardid,c.name,c.detail,c.tag,c.heart,c.time, a.user
+                    FROM card c
+                    JOIN bookmarks b ON c.cardid = b.cardid
+                    JOIN account a ON c.userid = a.userid
+                    WHERE b.userid = %s
+                """
+        cur.execute(query, (userid,))
+        result = cur.fetchall()
+        cur.close()
+        
+        if cur.rowcount >= 1:
+            return jsonify({"exit":True,"data":result}),200
+        else:
+            return jsonify({"exit":False}),201
+    except:
+        return jsonify({"success":'エラーが発生しました'}),500
+        
 if __name__ == "__main__":
     app.run(debug=True)
