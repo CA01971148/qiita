@@ -43,7 +43,7 @@ function Page() {
     },
   ]);
   const [checkHeart, setCheckHeart] = useState<boolean>(false);
-  const {id} = UseFetchName();
+  const {id,name} = UseFetchName();
   const [newComment, setNewComment] = useState("");
   const [previewContent, setPreviewContent] = useState('');
 
@@ -190,9 +190,9 @@ function Page() {
   return (
     <div className="min-h-screen">
       <Header />
-      <div className="flex flex-row">
-        <div onClick={heartClick} className={`text-6xl md:text-6xl md:transform md:translate-x-24 md:translate-y-14 ${checkHeart ? 'text-red-500 hover:text-red-800' : 'text-gray-500 hover:text-gray-300'} h-14 w-14`}>❤</div>
-        <div className="text-4xl mt-2 md:transform md:translate-x-24 md:translate-y-16 md:text-3xl">{cards?.score}</div>
+      <div className={`flex flex-row ${!name ? 'pt-12' : ''}`}>
+      {name &&(<div onClick={heartClick} className={`text-6xl md:text-6xl md:transform md:translate-x-24 md:translate-y-14 ${checkHeart ? 'text-red-500 hover:text-red-800' : 'text-gray-500 hover:text-gray-300'} h-14 w-14`}>❤</div>)}
+      {name && (<div className="text-4xl mt-2 md:transform md:translate-x-24 md:translate-y-16 md:text-3xl">{cards?.score}</div>)}
       </div>
       <div className="flex flex-col items-center mt-[-30px] md:mt-[-70px]">
         {/* 記事カード */}
