@@ -13,58 +13,65 @@ interface CardData {
   date: string;
   categoryId: number;
   user: string;
-};
+}
 
 const HomePage = () => {
   const [cards, setCards] = useState<CardData[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // ローディング状態を追加
 
-  // http://localhost:3001/postsからデータを取得
   useEffect(() => {
-    const requestURL = " http://localhost:3001/posts";
-
     const fetchData = async () => {
+      setIsLoading(true); // データ取得開始時にローディング状態をtrueに
       try {
-        const response = await fetch(requestURL);
-
+        const response = await fetch("http://localhost:3001/posts");
+        if (!response.ok) { // レスポンスがエラーの場合
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-
         setCards(data);
-      } catch{
-        setError('データベースからデータが取得できません')
-        console.error("データ取得中にエラーが発生した", error);
+      } catch (error: unknown) {
+        setErrorMessage('データベースからデータが取得できません');
+        if (error instanceof Error) {
+            console.error("データ取得中にエラーが発生した", error.message);
+        } else {
+            console.error("データ取得中に不明なエラーが発生しました", error);
+        }
+        return null;
+      } finally {
+        setIsLoading(false); // データ取得完了後（成功・失敗問わず）ローディング状態をfalseに
       }
     };
 
     fetchData();
   }, []);
 
+  if (isLoading) {
+    return <div>Loading...</div>; // ローディング中はLoading...を表示
+  }
+
+  if (errorMessage) {
+    return <div style={{ color: "red" }}>{errorMessage}</div>; // エラーメッセージを表示
+  }
+
   return (
     <div className="flex flex-col sm:flex-row">
       <LeftSidebar />
       <div className="w-full sm:w-1/2 p-4 border-b sm:border-r sm:border-b-0 border-gray-300 order-1 sm:order-none">
         <h2 className="font-bold text-lg">トレンドの記事</h2>
-        {/* トレンドの記事 */}
         <div className="mt-2 overflow-x-auto">
           <div className="flex space-x-4">
             {cards.map((card) => (
-              <div key={card.id} className="w-full  ">
-                {/* <div
-                  className=" sm:w-96   md:w-96 my-2 md:mx-auto
-      mx-2 rounded-md border shadow-md bg-white"
-                > */}
-                 <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
+              <div key={card.id} className="w-full">
+                <div className="min-w-[300px] items-center bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
                   <Card {...card} />
                 </div>
               </div>
             ))}
           </div>
         </div>
-        {/* おすすめの記事一覧 */}
         <h2 className="font-bold text-lg mt-6">おすすめの記事</h2>
         <div className="mt-2">
-          {/* 親コンテナにflex-colを追加 */}
           <div className="flex flex-col space-y-4">
             {cards.map((card) => (
               <div
