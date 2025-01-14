@@ -146,7 +146,6 @@ const HomePage = () => {
   const handleClick = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>, card: CardData) => {
     e.preventDefault();
     await postData(card);
-    // 即座に状態を反映
     setBook((prev) => {
       const updatedData: [number, number, string][] = prev?.data 
         ? [...prev.data, [0, card.id, ""]]
