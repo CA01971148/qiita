@@ -1,4 +1,12 @@
 import React from "react";
+import Image from "next/image"; // Imageコンポーネントをインポート
+
+// イベントデータの型を定義
+interface EventData {
+  title: string;
+  imageUrl: string;
+  link: string;
+}
 
 export const RightSidebar: React.FC = () => {
   const path = location.pathname;
@@ -16,6 +24,25 @@ export const RightSidebar: React.FC = () => {
     pageType = "trend";
   }
 
+  // 開催中のイベントデータ（例）
+  const events: EventData[] = [
+    {
+      title: "React勉強会",
+      imageUrl: "https://placehold.jp/200x100.png", // 仮の画像URL
+      link: "https://example.com/react-study",
+    },
+    {
+      title: "TypeScriptハンズオン",
+      imageUrl: "https://placehold.jp/200x100.png", // 仮の画像URL
+      link: "https://example.com/typescript-handson",
+    },
+    {
+      title: "フロントエンドMeetup",
+      imageUrl: "https://placehold.jp/200x100.png", // 仮の画像URL
+      link: "https://example.com/frontend-meetup",
+    },
+  ];
+
   return (
     <div className="w-full sm:w-1/4 p-4 order-3 sm:order-none">
       {pageType === "home" && (
@@ -31,6 +58,26 @@ export const RightSidebar: React.FC = () => {
             <li>おすすめ記事1</li>
             <li>おすすめ記事2</li>
             <li>おすすめ記事3</li>
+          </ul>
+
+          <h2 className="font-bold text-lg mt-6">開催中のイベント</h2>
+          <ul className="mt-2">
+            {events.map((event, index) => (
+              <li key={index} className="mb-2">
+                <a href={event.link} target="_blank" rel="noopener noreferrer">
+                  {/* 新しいタブで開く */}
+                  <Image
+                    src={event.imageUrl}
+                    alt={event.title}
+                    width={200} // 画像の幅を指定
+                    height={100} // 画像の高さを指定
+                    className="w-full rounded"
+                  />
+                  {/* 画像にroundedクラスを追加 */}
+                  <p className="mt-1">{event.title}</p>
+                </a>
+              </li>
+            ))}
           </ul>
         </>
       )}
