@@ -9,7 +9,6 @@ const Logout = () => {
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          // ログアウト成功時にページをリロード
           window.location.reload();
         } else {
           console.error('Logout failed:', data.error);

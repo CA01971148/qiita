@@ -58,7 +58,10 @@ const Page = () => {
           </div>
           <Link
             href="../settings/account"
-            className="block text-gray-800 hover:bg-gray-100 p-2 rounded"
+            className={`block p-2 rounded ${
+              isMenuOpen && "bg-gray-200 text-black font-bold mt-4"
+            }`}
+            aria-current="page"
           >
             Account
           </Link>
@@ -70,40 +73,23 @@ const Page = () => {
           </Link>
           <Link
             href="../settings/password"
-            className={`block p-2 rounded ${
-              isMenuOpen && "bg-gray-200 text-black font-bold"
-            }`}
-            aria-current="page"
+            className="block text-gray-800 hover:bg-gray-100 p-2 rounded"
           >
             Password
           </Link>
         </nav>
       </div>
-      {/* Main Content */}
-      <div className="flex-1 p-6">
+      {/* Main Account Card Content */}
+      <div className="flex-1 p-6 ">
         <div className="bg-white shadow-md rounded-lg p-6 border border-gray">
-          <h2 className="text-xl font-bold mb-4">パスワード</h2>
-          <p className="mb-2">
-            パスワードは Qiita API を利用する際に必要となります。
+          {/* Stats */}
+          <div className="flex justify-around text-gray-600"></div>
+          <h2>アカウント削除</h2>
+          <p>
+            一度アカウントを削除すると、二度と元に戻せません。十分ご注意ください。
           </p>
-          <p className="mb-4">
-            パスワードを変更すると、Qiita APIで利用するトークンも変更されます。
-          </p>
-          <Link
-            href="https://help.qiita.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline mb-4 inline-block"
-          >
-            パスワード変更に関するヘルプ
-          </Link>
-          <h3 className="text-lg font-semibold mt-4 mb-2">メールアドレス</h3>
-          <p className="mb-4">
-            パスワードの設定URLを登録されたメールアドレス（例:
-            user@example.com）に送ります。
-          </p>
-          <button className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            パスワード設定メールを送信
+          <button className="mt-4 w-full py-2 bg-red-600 text-white rounded-lg hover:bg-red-900">
+            アカウント削除
           </button>
         </div>
       </div>

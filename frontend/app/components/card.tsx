@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { handleClick } from "../utils/handleclick";
-import UseFetchName from "../_components/hooks/UseFetchName";
 import Link from "next/link";
 
 type CardData = {
@@ -18,8 +17,6 @@ type CardData = {
 
 export default function Card(props: CardData) {
   const [liked, setLiked] = useState(false);
-
-  const { name, id } = UseFetchName();
 
   return (
     <div>
