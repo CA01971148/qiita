@@ -21,7 +21,7 @@ function Page() {
   ]);
   const [newComment, setNewComment] = useState("");
 
-  const handleNewCommentChange = (e) => {
+  const handleNewCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
   };
 
@@ -74,6 +74,34 @@ function Page() {
           <p className="text-gray-700 text-base">
             これは記事の内容のプレビューです。全文はここでは表示されませんが、主要な情報が含まれています。
           </p>
+        </div>
+
+        {/* ユーザーカード */}
+        <div className="max-w-md w-full mt-8 bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
+          <div className="flex items-center mb-4">
+            <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+            {/* アイコンを大きく */}
+            <div className="ml-4">
+              {/* 名前と自己紹介をまとめる */}
+              <p className="text-gray-700 font-bold text-lg">
+                ユーザーID
+              </p>
+              {/* 名前を大きく */}
+              <p className="text-gray-500 text-sm">簡単な自己紹介文。</p>{" "}
+              {/* 自己紹介文を追加 */}
+            </div>
+          </div>
+        </div>
+
+        {/* トレンド記事カード */}
+        <div className="max-w-md w-full mt-8 bg-white shadow-md rounded-lg overflow-hidden border border-black/10 p-6">
+          <h3 className="text-lg font-semibold mb-2">トレンド記事</h3>
+          <ul className="list-disc pl-6">
+            {/* リストスタイルを追加 */}
+            <li className="mb-2">トレンド記事 1のタイトル</li>
+            <li className="mb-2">トレンド記事 2のタイトル</li>
+            <li className="mb-2">トレンド記事 3のタイトル</li>
+          </ul>
         </div>
 
         {/* コメントカード */}
