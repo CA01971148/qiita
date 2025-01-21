@@ -39,7 +39,7 @@ export default function Timeline() {
     };
 
     fetchData();
-  }, []);
+  }, [error]);
 
   // http://localhost:5000/order/timeからデータを取得
   // useEffect(() => {

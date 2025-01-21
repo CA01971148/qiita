@@ -89,11 +89,11 @@ export const RightSidebar: React.FC = () => {
             <li>トレンド記事2</li>
             <li>トレンド記事3</li>
           </ul>
-          <h2 className="font-bold text-lg mt-6">ユーザー</h2>
+          <h2 className="font-bold text-lg mt-6">おすすめユーザー</h2>
           <ul className="mt-2">
-            <li>フォロー中のユーザー</li>
-            <li>最近の活動</li>
-            <li>おすすめのユーザー</li>
+            <li>ユーザー1</li>
+            <li>ユーザー2</li>
+            <li>ユーザー3</li>
           </ul>
         </>
       )}

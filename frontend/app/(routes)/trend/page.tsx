@@ -122,7 +122,7 @@ export default function Trend() {
     };
 
     fetchData();
-  }, []);
+  }, [error]);
 
   // [http://localhost:5000/order/trend]からデータを取得
   // useEffect(() => {

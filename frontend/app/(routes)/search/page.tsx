@@ -69,35 +69,58 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
+import { getTagsData, TagData } from "@/app/(routes)/tags/data";
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
-  const query = searchParams.get("query"); // クエリパラメータ "query" を取得
-  const [searchResults, setSearchResults] = useState<string[]>([]); // ダミーの検索結果を保存
+  const query = searchParams.get("query");
+  const [searchResults, setSearchResults] = useState<(TagData | string)[]>([]); // anyに変更
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    const fetchSearchResults = async (searchQuery: string) => {
+      setIsLoading(true);
+      const allTags = await getTagsData();
+
+      // タグの検索
+      const tagResults = allTags.filter((tag) =>
+        tag.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      // ダミーデータの検索（以前のコードから変更なし）
+      const dummyData = [
+        "記事1: Next.js 入門",
+        "記事2: React パフォーマンス最適化",
+        "記事3: TypeScript の基本",
+        "記事4: JavaScript の最新機能",
+      ];
+      const dummyResults = dummyData.filter((item) =>
+        item.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      setSearchResults([...tagResults, ...dummyResults]); // タグとダミーデータを結合
+      setIsLoading(false);
+    };
+
     if (query) {
-      // 実際の検索処理（APIリクエストなど）をここに実装
       fetchSearchResults(query);
+    } else {
+      setSearchResults([]);
     }
   }, [query]);
 
-  const fetchSearchResults = (searchQuery: string) => {
-    // ここでは仮のデータを使った検索処理を実装
-    const dummyData = [
-      "記事1: Next.js 入門",
-      "記事2: React パフォーマンス最適化",
-      "記事3: TypeScript の基本",
-      "記事4: JavaScript の最新機能",
-    ];
-
-    // ダミー検索処理: クエリに一致するデータをフィルタリング
-    const results = dummyData.filter((item) =>
-      item.toLowerCase().includes(searchQuery.toLowerCase())
+  if (isLoading) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="p-4 flex-grow">
+          <h1 className="text-2xl font-bold mb-4">検索結果</h1>
+          <p className="text-center">ロード中...</p>
+        </div>
+        <Footer />
+      </div>
     );
-
-    setSearchResults(results);
-  };
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -105,19 +128,37 @@ const SearchPage = () => {
       <div className="p-4 flex-grow">
         <h1 className="text-2xl font-bold mb-4">検索結果</h1>
 
-        {/* 検索クエリを表示 */}
         {query && (
           <p className="mb-4">
             <span className="font-semibold">検索ワード:</span> {query}
           </p>
         )}
 
-        {/* 検索結果を表示 */}
         {searchResults.length > 0 ? (
-          <ul className="list-disc ml-5">
-            {searchResults.map((result, index) => (
-              <li key={index}>{result}</li>
-            ))}
+          <ul className="grid grid-cols-3 gap-4">
+            {searchResults.map((result, index) => {
+              if (typeof result === "string") {
+                return (
+                  <li key={index} className="border rounded p-4">
+                    {result}
+                  </li>
+                );
+              } else {
+                return (
+                  <li key={result.name} className="border rounded p-4">
+                    <a
+                      href={`/tags/${result.name}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      <h2 className="text-xl font-semibold">{result.name}</h2>
+                      <p className="text-gray-600 text-sm">
+                        {result.description}
+                      </p>
+                    </a>
+                  </li>
+                );
+              }
+            })}
           </ul>
         ) : (
           <p>検索結果が見つかりませんでした。</p>
